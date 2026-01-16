@@ -59,3 +59,4 @@ server/prisma/*.db-journal
 # Temporary files
 tmp/
 temp/
+.vercel
