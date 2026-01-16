@@ -1,0 +1,499 @@
+# Ministry Grant Tracker
+
+> A full-stack GraphQL demo showcasing donor-advised fund management and ministry grant workflows.
+
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://ncf-demo.thomashundley.com)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)](https://www.typescriptlang.org/)
+[![Apollo Server](https://img.shields.io/badge/Apollo_Server-5.x-purple)](https://www.apollographql.com/docs/apollo-server/)
+[![React](https://img.shields.io/badge/React-18.x-61dafb)](https://react.dev/)
+
+---
+
+## The Story
+
+A recruiter said my resume didn't show GraphQL experience.
+
+So I built this. In about 30 minutes. While having coffee.
+
+**Because that's what an AI Orchestrator does.** We don't "have experience" in technologies—we have the ability to implement *any* technology on demand.
+
+---
+
+## What This Demo Shows
+
+This application models a real-world grant management workflow:
+
+1. **Donors** create **Giving Funds** (donor-advised fund accounts)
+2. **Grant Requests** are submitted from Giving Funds to **Ministries**
+3. Grants progress through workflow: `PENDING` → `APPROVED` → `FUNDED`
+4. Funding atomically deducts from the Giving Fund and credits the Ministry
+
+---
+
+## Tech Stack
+
+| Layer | Technology | Version | Purpose |
+|-------|------------|---------|---------|
+| **Frontend** | React + Vite | 18.x / 6.x | Modern React with fast HMR |
+| **GraphQL Client** | Apollo Client | 3.x | Caching, state management |
+| **GraphQL Server** | Apollo Server | 5.x | Industry-standard GraphQL |
+| **ORM** | Prisma | 5.x | Type-safe database access |
+| **Database** | PostgreSQL | 15+ | Production-grade RDBMS |
+| **Styling** | Tailwind CSS | 3.x | Utility-first CSS |
+| **Language** | TypeScript | 5.x | Full type safety |
+
+### Why These Choices?
+
+**Apollo Server 5** - Industry standard with 5M+ weekly downloads. Federation-ready for microservices. Excellent TypeScript support.
+
+**Prisma** - Type-safe database queries with auto-generated TypeScript types. Declarative schema with migrations.
+
+**React + Vite (not Next.js)** - Demonstrates pure React/GraphQL patterns where Apollo Client handles all data fetching. Simpler architecture for API-focused applications.
+
+---
+
+## Project Structure
+
+```
+graphql-demo/
+├── client/                     # React Frontend
+│   ├── src/
+│   │   ├── components/         # Reusable UI components
+│   │   │   ├── CategoryBadge.tsx
+│   │   │   ├── ErrorMessage.tsx
+│   │   │   ├── GrantRequestForm.tsx
+│   │   │   ├── GrantStatusBadge.tsx
+│   │   │   ├── LoadingSpinner.tsx
+│   │   │   └── MinistryForm.tsx
+│   │   ├── graphql/            # GraphQL operations
+│   │   │   ├── mutations.ts    # All mutations with fragments
+│   │   │   └── queries.ts      # All queries with fragments
+│   │   ├── lib/
+│   │   │   └── apollo.ts       # Apollo Client config
+│   │   ├── pages/              # Route components
+│   │   │   ├── Dashboard.tsx
+│   │   │   ├── DonorsPage.tsx
+│   │   │   ├── GrantsPage.tsx
+│   │   │   └── MinistriesPage.tsx
+│   │   ├── App.tsx             # Main app with routing
+│   │   ├── index.css           # Global styles
+│   │   └── main.tsx            # Entry point
+│   ├── index.html
+│   ├── package.json
+│   ├── tailwind.config.js
+│   └── vite.config.ts
+│
+├── server/                     # GraphQL Backend
+│   ├── prisma/
+│   │   ├── migrations/         # Database migrations
+│   │   ├── schema.prisma       # Database schema
+│   │   └── seed.ts             # Demo data seeding
+│   ├── src/
+│   │   ├── schema/
+│   │   │   ├── resolvers.ts    # GraphQL resolvers
+│   │   │   └── typeDefs.ts     # GraphQL schema (600+ lines)
+│   │   └── index.ts            # Server entry point
+│   └── package.json
+│
+├── package.json                # Workspace root
+└── README.md
+```
+
+---
+
+## Data Model
+
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│   Donor     │────<│ GivingFund  │────<│   Grant     │
+│             │     │             │     │             │
+│ id          │     │ id          │     │ id          │
+│ firstName   │     │ name        │     │ amount      │
+│ lastName    │     │ balance     │     │ status      │
+│ email       │     │ donorId     │     │ purpose     │
+│ phone       │     │ createdAt   │     │ notes       │
+│ createdAt   │     └─────────────┘     │ createdAt   │
+└─────────────┘                         │ approvedAt  │
+                                        │ fundedAt    │
+                                        │ givingFundId│
+                                        │ ministryId  │
+                                        └──────┬──────┘
+                                               │
+                                        ┌──────▼──────┐
+                                        │  Ministry   │
+                                        │             │
+                                        │ id          │
+                                        │ name        │
+                                        │ ein         │
+                                        │ category    │
+                                        │ description │
+                                        │ mission     │
+                                        │ website     │
+                                        │ city, state │
+                                        │ verified    │
+                                        │ totalFunded │
+                                        │ createdAt   │
+                                        └─────────────┘
+```
+
+### Grant Status Workflow
+
+```
+PENDING ──┬── approveGrant() ──→ APPROVED ──→ fundGrant() ──→ FUNDED
+          │
+          └── rejectGrant() ──→ REJECTED
+```
+
+The `fundGrant()` mutation demonstrates business logic:
+- Validates grant is in APPROVED status
+- Checks Giving Fund has sufficient balance
+- Executes atomic transaction:
+  - Deducts amount from GivingFund.balance
+  - Adds amount to Ministry.totalFunded
+  - Updates grant status to FUNDED
+  - Sets fundedAt timestamp
+
+---
+
+## Quick Start
+
+### Prerequisites
+
+- Node.js 18+
+- Docker (for local PostgreSQL)
+- npm
+
+### 1. Clone and Install
+
+```bash
+git clone https://github.com/tomhundley/ncf-grant-demo.git
+cd ncf-grant-demo
+npm install
+```
+
+### 2. Start Database
+
+```bash
+# Start PostgreSQL in Docker
+docker run -d \
+  --name ncf-postgres \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=devpassword \
+  -e POSTGRES_DB=ncf_demo \
+  -p 5433:5432 \
+  postgres:15-alpine
+```
+
+### 3. Configure Environment
+
+```bash
+echo 'DATABASE_URL="postgresql://postgres:devpassword@localhost:5433/ncf_demo"' > server/.env
+```
+
+### 4. Run Migrations and Seed
+
+```bash
+cd server
+npx prisma migrate dev
+npx prisma db seed
+cd ..
+```
+
+### 5. Start Development Servers
+
+```bash
+# Terminal 1: GraphQL server
+cd server && npm run dev
+
+# Terminal 2: React client
+cd client && npm run dev
+```
+
+- **GraphQL Playground**: http://localhost:4000
+- **React Application**: http://localhost:5173
+
+---
+
+## GraphQL API Examples
+
+### Queries
+
+```graphql
+# Dashboard statistics with aggregations
+query GetDashboardStats {
+  dashboardStats {
+    totalMinistries
+    verifiedMinistries
+    totalDonors
+    totalGivingFunds
+    totalFundBalance    # Sum of all giving fund balances
+    pendingGrants       # Count of pending grants
+    totalGranted        # Sum of all funded grants
+  }
+}
+
+# Cursor-based pagination with filtering
+query ListMinistries($first: Int, $after: String, $filter: MinistryFilter) {
+  ministries(first: $first, after: $after, filter: $filter) {
+    edges {
+      cursor
+      node {
+        id
+        name
+        category
+        verified
+        totalFunded
+        city
+        state
+      }
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    totalCount
+  }
+}
+
+# Nested relationship loading
+query GetDonorWithFunds($id: Int!) {
+  donor(id: $id) {
+    id
+    firstName
+    lastName
+    email
+    givingFunds {
+      id
+      name
+      balance
+      grants {
+        id
+        amount
+        status
+        ministry {
+          name
+        }
+      }
+    }
+  }
+}
+```
+
+### Mutations
+
+```graphql
+# Create ministry with all fields
+mutation CreateMinistry($input: CreateMinistryInput!) {
+  createMinistry(input: $input) {
+    id
+    name
+    category
+    verified
+    createdAt
+  }
+}
+
+# Create grant request (starts workflow)
+mutation CreateGrantRequest($input: CreateGrantInput!) {
+  createGrantRequest(input: $input) {
+    id
+    amount
+    status
+    purpose
+    ministry {
+      name
+    }
+    givingFund {
+      name
+      balance
+    }
+  }
+}
+
+# Fund grant (atomic transaction with balance update)
+mutation FundGrant($id: Int!) {
+  fundGrant(id: $id) {
+    id
+    status
+    fundedAt
+    givingFund {
+      balance  # Reduced by grant amount
+    }
+    ministry {
+      totalFunded  # Increased by grant amount
+    }
+  }
+}
+```
+
+---
+
+## Key Features Demonstrated
+
+### 1. Cursor-Based Pagination
+```typescript
+// Apollo Client cache policy for Relay-style pagination
+typePolicies: {
+  Query: {
+    fields: {
+      ministries: relayStylePagination(['filter']),
+    },
+  },
+}
+```
+
+### 2. Complex Mutations with Business Logic
+The `fundGrant` resolver demonstrates proper transaction handling:
+```typescript
+// Atomic transaction with multiple table updates
+return prisma.$transaction(async (tx) => {
+  // Validate status
+  // Check balance
+  // Update GivingFund balance
+  // Update Ministry totalFunded
+  // Update Grant status and fundedAt
+});
+```
+
+### 3. Custom Scalars
+- `DateTime` - ISO 8601 date strings
+- `Decimal` - Precise currency amounts
+
+### 4. Input Validation
+- Required field validation
+- Business rule validation (sufficient balance)
+- Enum validation (status, category)
+
+### 5. Relationship Loading
+Efficient data loading with Prisma includes:
+```typescript
+// Nested relationship resolution
+include: {
+  ministry: true,
+  givingFund: {
+    include: {
+      donor: true,
+    },
+  },
+}
+```
+
+---
+
+## Demo Data
+
+The seed script creates realistic ministry data:
+
+| Entity | Count | Examples |
+|--------|-------|----------|
+| Ministries | 12 | Samaritan's Purse, Compassion International, Cru |
+| Donors | 5 | Sample donors with varied giving patterns |
+| Giving Funds | 8 | Family foundations, DAF accounts |
+| Grants | 10 | Various statuses for workflow demo |
+
+---
+
+## Scripts
+
+### Root Workspace
+```bash
+npm install         # Install all dependencies
+npm run dev         # Start both servers (requires concurrently)
+npm run build       # Build both packages
+```
+
+### Server
+```bash
+npm run dev         # Start with hot reload
+npm run build       # Compile TypeScript
+npm start           # Run production build
+npm run db:migrate  # Run Prisma migrations
+npm run db:seed     # Seed demo data
+npm run db:studio   # Open Prisma Studio GUI
+```
+
+### Client
+```bash
+npm run dev         # Start Vite dev server
+npm run build       # Production build
+npm run preview     # Preview production build
+npm run lint        # Run ESLint
+```
+
+---
+
+## Environment Variables
+
+### Server (`server/.env`)
+```bash
+DATABASE_URL="postgresql://user:pass@host:port/database"
+PORT=4000  # Optional, defaults to 4000
+```
+
+### Client (`client/.env`)
+```bash
+VITE_GRAPHQL_URI="http://localhost:4000"  # Optional, defaults to this
+```
+
+---
+
+## Deployment
+
+### Production Database Options
+- **Supabase** - Free tier PostgreSQL with automatic backups
+- **Railway** - Simple PostgreSQL with easy scaling
+- **Neon** - Serverless PostgreSQL with branching
+
+### Vercel Deployment
+1. Connect GitHub repository
+2. Set build settings:
+   - Build Command: `cd client && npm run build`
+   - Output Directory: `client/dist`
+3. Add environment variables
+4. Deploy server separately (Railway, Render, etc.)
+
+---
+
+## Architecture Highlights
+
+### Why Apollo Server 5?
+- **Industry standard** - 5M+ weekly downloads, recognized on resumes
+- **Federation-ready** - Prepared for microservices architecture
+- **Apollo Studio** - Built-in monitoring and tracing
+- **TypeScript-first** - Excellent type support
+
+### Why Prisma?
+- **Type-safe queries** - Compile-time error checking
+- **Auto-generated types** - TypeScript types from schema
+- **Declarative migrations** - Version-controlled schema changes
+- **Query optimization** - Automatic batching and caching
+
+### Clean Code Patterns
+- **Separation of concerns** - Schema, resolvers, and database access are separate
+- **Type safety** - Full TypeScript from database to UI
+- **Documentation** - Comprehensive comments throughout
+- **Error handling** - Proper error messages and validation
+
+---
+
+## The Point
+
+When someone can go from "I've never written GraphQL" to "here's a production-grade implementation" in 30 minutes, maybe the checkbox hiring model needs an upgrade.
+
+**Built with:**
+- 26 years of software architecture experience
+- AI orchestration (Claude as co-pilot)
+- Coffee
+- A point to prove
+
+---
+
+## License
+
+MIT
+
+---
+
+*P.S. - Yes, I know GraphQL now. Please update your spreadsheet.*

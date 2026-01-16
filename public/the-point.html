@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Recruiter Didn't See Enough GraphQL</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: #0d0d0d;
+            color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+            background: radial-gradient(ellipse at center, #1a1a1a 0%, #0d0d0d 100%);
+        }
+
+        .scene-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .main-quote {
+            font-size: 2rem;
+            font-style: italic;
+            color: #888;
+            max-width: 700px;
+            margin-bottom: 60px;
+            line-height: 1.6;
+        }
+
+        .main-quote span {
+            color: #e74c3c;
+        }
+
+        .divider {
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #e74c3c, transparent);
+            margin: 40px 0;
+        }
+
+        .response-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .the-choice {
+            font-size: 1.4rem;
+            color: #aaa;
+            margin-bottom: 30px;
+        }
+
+        .the-action {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #fff;
+            max-width: 800px;
+            line-height: 1.4;
+        }
+
+        .the-action span {
+            color: #e74c3c;
+            text-decoration: underline;
+            text-decoration-color: #e74c3c;
+        }
+
+        .time-badge {
+            margin-top: 50px;
+            background: #e74c3c;
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 100px 20px;
+            background: #111;
+        }
+
+        .stats-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .stats-intro {
+            text-align: center;
+            font-size: 1.3rem;
+            color: #888;
+            margin-bottom: 60px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0;
+            border-bottom: 1px solid #222;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        /* What It Contains */
+        .contents-section {
+            padding: 100px 20px;
+            background: #0d0d0d;
+        }
+
+        .contents-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contents-title {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 60px;
+            color: #fff;
+        }
+
+        .contents-title span {
+            color: #e74c3c;
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            padding: 20px 0;
+            border-bottom: 1px solid #222;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-list li::before {
+            content: "✓";
+            color: #27ae60;
+            font-weight: bold;
+            margin-right: 20px;
+            font-size: 1.3rem;
+        }
+
+        .feature-name {
+            color: #fff;
+            flex: 1;
+        }
+
+        .feature-note {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* The Real Resume */
+        .resume-section {
+            padding: 100px 20px;
+            background: #111;
+        }
+
+        .resume-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .resume-title {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 60px;
+            color: #888;
+        }
+
+        .resume-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .resume-column h3 {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .resume-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #222;
+        }
+
+        .resume-req {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .resume-actual {
+            color: #27ae60;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        /* The Point */
+        .point-section {
+            padding: 120px 20px;
+            text-align: center;
+            background: linear-gradient(180deg, #0d0d0d 0%, #1a0a0a 100%);
+        }
+
+        .point-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .point-title {
+            font-size: 2.5rem;
+            color: #e74c3c;
+            margin-bottom: 40px;
+        }
+
+        .point-text {
+            font-size: 1.3rem;
+            color: #aaa;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .point-text strong {
+            color: #fff;
+        }
+
+        .mic-drop {
+            font-size: 3rem;
+            margin-top: 60px;
+        }
+
+        /* CTA */
+        .cta-section {
+            padding: 80px 20px;
+            background: #e74c3c;
+            text-align: center;
+        }
+
+        .cta-text {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #fff;
+            color: #e74c3c;
+            padding: 20px 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            transition: transform 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+
+        footer {
+            padding: 60px 20px;
+            text-align: center;
+            background: #0d0d0d;
+            color: #444;
+        }
+
+        footer a {
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .main-quote {
+                font-size: 1.4rem;
+            }
+
+            .the-action {
+                font-size: 1.6rem;
+            }
+
+            .resume-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <div class="scene-label">The Recruiter Said</div>
+        <p class="main-quote">
+            "Your resume doesn't show <span>GraphQL</span> experience.<br>
+            Unfortunately, we can't move forward."
+        </p>
+
+        <div class="divider"></div>
+
+        <div class="response-label">My Response</div>
+        <p class="the-choice">Instead of adding "GraphQL" to my resume...</p>
+        <p class="the-action">
+            I built a <span>fully functioning website</span><br>to show it instead.
+        </p>
+
+        <div class="time-badge">30 MINUTES</div>
+    </section>
+
+    <section class="stats-section">
+        <div class="stats-container">
+            <p class="stats-intro">What "adding GraphQL to my resume" actually looks like:</p>
+
+            <div class="stat-row">
+                <span class="stat-label">Lines of GraphQL Schema</span>
+                <span class="stat-value">600+</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Core Domain Entities</span>
+                <span class="stat-value">4</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Queries & Mutations</span>
+                <span class="stat-value">15+</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Time to Build</span>
+                <span class="stat-value">30 min</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Level of Petty Satisfaction</span>
+                <span class="stat-value">∞</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="contents-section">
+        <div class="contents-container">
+            <h2 class="contents-title">This "<span>resume update</span>" includes:</h2>
+
+            <ul class="feature-list">
+                <li>
+                    <span class="feature-name">Custom Scalars</span>
+                    <span class="feature-note">DateTime, Decimal with validation</span>
+                </li>
+                <li>
+                    <span class="feature-name">Relay-Style Cursor Pagination</span>
+                    <span class="feature-note">Edges, nodes, pageInfo, the works</span>
+                </li>
+                <li>
+                    <span class="feature-name">Workflow State Machine</span>
+                    <span class="feature-note">PENDING → APPROVED → FUNDED</span>
+                </li>
+                <li>
+                    <span class="feature-name">Complex Entity Relationships</span>
+                    <span class="feature-note">Ministry ↔ Grant ↔ GivingFund ↔ Donor</span>
+                </li>
+                <li>
+                    <span class="feature-name">Full CRUD Operations</span>
+                    <span class="feature-note">Create, Read, Update, Delete, Verify, Fund</span>
+                </li>
+                <li>
+                    <span class="feature-name">Dashboard Aggregation</span>
+                    <span class="feature-note">Real-time stats across all entities</span>
+                </li>
+                <li>
+                    <span class="feature-name">Input Type Validation</span>
+                    <span class="feature-note">Proper separation of input/output types</span>
+                </li>
+                <li>
+                    <span class="feature-name">Full Documentation</span>
+                    <span class="feature-note">Every field, every type, documented</span>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="resume-section">
+        <div class="resume-container">
+            <h2 class="resume-title">Meanwhile, the job requirements vs. my actual resume:</h2>
+
+            <div class="resume-grid">
+                <div class="resume-column">
+                    <h3>They Wanted</h3>
+                    <div class="resume-item">
+                        <div class="resume-req">6+ years C# / .NET Core</div>
+                    </div>
+                    <div class="resume-item">
+                        <div class="resume-req">Azure Functions experience</div>
+                    </div>
+                    <div class="resume-item">
+                        <div class="resume-req">Azure API Management</div>
+                    </div>
+                    <div class="resume-item">
+                        <div class="resume-req">CI/CD pipelines</div>
+                    </div>
+                    <div class="resume-item">
+                        <div class="resume-req">SQL/NoSQL databases</div>
+                    </div>
+                    <div class="resume-item">
+                        <div class="resume-req">Application Insights</div>
+                    </div>
+                </div>
+
+                <div class="resume-column">
+                    <h3>I Have</h3>
+                    <div class="resume-item">
+                        <div class="resume-actual">26 years</div>
+                    </div>
+                    <div class="resume-item">
+                        <div class="resume-actual">400+ in production</div>
+                    </div>
+                    <div class="resume-item">
+                        <div class="resume-actual">Acting CTO</div>
+                    </div>
+                    <div class="resume-item">
+                        <div class="resume-actual">Run the DevOps org</div>
+                    </div>
+                    <div class="resume-item">
+                        <div class="resume-actual">97+ Cosmos containers</div>
+                    </div>
+                    <div class="resume-item">
+                        <div class="resume-actual">Obviously</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="point-section">
+        <div class="point-container">
+            <h2 class="point-title">The Point</h2>
+
+            <p class="point-text">
+                I'm an <strong>AI Orchestrator</strong>.
+            </p>
+
+            <p class="point-text">
+                I direct AI agents that built a <strong>52,000+ line production platform</strong>.
+            </p>
+
+            <p class="point-text">
+                Asking me if I "know GraphQL" is like asking a pilot if they've ever pressed the "G" key.
+            </p>
+
+            <p class="point-text">
+                The answer is: <strong>I can learn anything in 30 minutes.</strong><br>
+                I just proved it.
+            </p>
+
+            <p class="point-text">
+                <strong>Checkbox recruiting is dead.</strong>
+            </p>
+
+            <div class="mic-drop">🎤⬇️</div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <p class="cta-text">Want to see the GraphQL API I built during this tantrum?</p>
+        <a href="/graphql" class="cta-button">Open GraphQL Playground</a>
+    </section>
+
+    <footer>
+        <p>
+            Built with Claude, coffee, and 26 years of knowing how software actually works.<br><br>
+            <a href="https://elegantsoftwaresolutions.com">Elegant Software Solutions</a> |
+            <a href="https://thomashundley.com">thomashundley.com</a>
+        </p>
+    </footer>
+
+</body>
+</html>

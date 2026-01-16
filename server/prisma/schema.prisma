@@ -1,0 +1,162 @@
+// =============================================================================
+// NCF Grant Management Demo - Prisma Schema
+// =============================================================================
+// This schema models a donor-advised fund grant management system inspired by
+// the National Christian Foundation's operations. It demonstrates:
+//   - One-to-many relationships (Donor → GivingFunds, Ministry → Grants)
+//   - Many-to-one relationships (Grant → Ministry, Grant → GivingFund)
+//   - Enums for type-safe status management
+//   - Proper indexing for query performance
+//   - Audit fields (createdAt, updatedAt)
+// =============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =============================================================================
+// MINISTRY MODEL
+// =============================================================================
+// Represents churches, charities, and nonprofit organizations that receive
+// grants from donor-advised funds. Each ministry must be verified before
+// grants can be distributed to them.
+
+model Ministry {
+  id          Int              @id @default(autoincrement())
+  name        String           @db.VarChar(255)
+  ein         String?          @unique @db.VarChar(10) // Employer Identification Number
+  category    MinistryCategory
+  description String?          @db.Text
+  mission     String?          @db.Text
+  website     String?          @db.VarChar(255)
+  city        String?          @db.VarChar(100)
+  state       String?          @db.VarChar(50)
+  country     String           @default("USA") @db.VarChar(50)
+  verified    Boolean          @default(false)
+  active      Boolean          @default(true)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  // Relations
+  grants Grant[]
+
+  // Indexes for common queries
+  @@index([category])
+  @@index([verified, active])
+  @@index([name])
+}
+
+// =============================================================================
+// DONOR MODEL
+// =============================================================================
+// Represents individuals or families who have established giving funds.
+// Donors can have multiple giving funds for different purposes.
+
+model Donor {
+  id        Int      @id @default(autoincrement())
+  firstName String   @db.VarChar(100)
+  lastName  String   @db.VarChar(100)
+  email     String   @unique @db.VarChar(255)
+  phone     String?  @db.VarChar(20)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  givingFunds GivingFund[]
+
+  // Indexes
+  @@index([email])
+  @@index([lastName, firstName])
+}
+
+// =============================================================================
+// GIVING FUND MODEL
+// =============================================================================
+// A donor-advised fund account that holds charitable assets. Donors can
+// recommend grants from their fund to verified ministries. The fund
+// balance is updated as contributions are made and grants are distributed.
+
+model GivingFund {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(255)
+  description String?  @db.Text
+  balance     Decimal  @default(0) @db.Decimal(15, 2)
+  donorId     Int
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  donor  Donor   @relation(fields: [donorId], references: [id], onDelete: Cascade)
+  grants Grant[]
+
+  // Indexes
+  @@index([donorId])
+  @@index([active])
+}
+
+// =============================================================================
+// GRANT MODEL
+// =============================================================================
+// Represents a grant distribution from a giving fund to a ministry.
+// Grants follow a workflow: PENDING → APPROVED → FUNDED (or REJECTED)
+// The fundGrant mutation handles the actual transfer of funds.
+
+model Grant {
+  id           Int         @id @default(autoincrement())
+  amount       Decimal     @db.Decimal(15, 2)
+  status       GrantStatus @default(PENDING)
+  purpose      String?     @db.Text // Description of what the grant is for
+  notes        String?     @db.Text // Internal notes from fund advisor
+
+  // Foreign keys
+  givingFundId Int
+  ministryId   Int
+
+  // Timestamps
+  requestedAt  DateTime    @default(now())
+  approvedAt   DateTime?
+  fundedAt     DateTime?
+  rejectedAt   DateTime?
+  updatedAt    DateTime    @updatedAt
+
+  // Relations
+  givingFund GivingFund @relation(fields: [givingFundId], references: [id], onDelete: Cascade)
+  ministry   Ministry   @relation(fields: [ministryId], references: [id], onDelete: Restrict)
+
+  // Indexes for common queries
+  @@index([status])
+  @@index([givingFundId])
+  @@index([ministryId])
+  @@index([requestedAt])
+}
+
+// =============================================================================
+// ENUMS
+// =============================================================================
+
+/// Categories for ministry classification
+enum MinistryCategory {
+  CHURCH           // Local churches and congregations
+  MISSIONS         // Domestic and international mission organizations
+  EDUCATION        // Christian schools, universities, seminaries
+  HUMANITARIAN     // Disaster relief, poverty alleviation
+  YOUTH            // Youth ministry and camps
+  MEDIA            // Christian broadcasting and publishing
+  HEALTHCARE       // Medical missions and hospitals
+  ADVOCACY         // Pro-life, religious liberty organizations
+  OTHER            // Miscellaneous ministries
+}
+
+/// Grant status workflow
+enum GrantStatus {
+  PENDING   // Grant request submitted, awaiting review
+  APPROVED  // Grant approved, awaiting funding
+  FUNDED    // Grant has been distributed to ministry
+  REJECTED  // Grant request was declined
+}

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GraphQL Demo | Built in 30 Minutes Because a Recruiter Asked</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(180deg, rgba(230, 57, 70, 0.1) 0%, transparent 100%);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: #e63946;
+            margin-bottom: 10px;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            color: #a8dadc;
+            font-style: italic;
+        }
+
+        .timer-badge {
+            display: inline-block;
+            background: #e63946;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            margin-top: 20px;
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Comparison Table */
+        .comparison-section {
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .comparison-section h2 {
+            text-align: center;
+            color: #f1faee;
+            margin-bottom: 40px;
+            font-size: 2rem;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: #e63946;
+            color: white;
+            padding: 20px;
+            text-align: left;
+            font-size: 1.1rem;
+        }
+
+        .comparison-table td {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .comparison-table tr:hover {
+            background: rgba(230, 57, 70, 0.1);
+        }
+
+        .requirement {
+            color: #a8dadc;
+        }
+
+        .reality {
+            color: #2ecc71;
+            font-weight: bold;
+        }
+
+        .verdict {
+            text-align: center;
+            padding: 30px;
+            background: rgba(230, 57, 70, 0.2);
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .verdict-text {
+            font-size: 1.3rem;
+            color: #e63946;
+            font-style: italic;
+        }
+
+        /* Comic Strip */
+        .comic-section {
+            padding: 60px 20px;
+        }
+
+        .comic-section h2 {
+            text-align: center;
+            color: #f1faee;
+            margin-bottom: 40px;
+            font-size: 2rem;
+        }
+
+        .comic-strip {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .comic-panel {
+            background: #f1faee;
+            border-radius: 10px;
+            padding: 25px;
+            color: #1a1a2e;
+            position: relative;
+            min-height: 250px;
+        }
+
+        .panel-number {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            background: #e63946;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .panel-title {
+            font-size: 0.9rem;
+            color: #e63946;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .speech-bubble {
+            background: #a8dadc;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .speech-bubble.recruiter {
+            background: #ffb3b3;
+        }
+
+        .speech-bubble.internal {
+            background: #ffffcc;
+            font-style: italic;
+        }
+
+        .speech-bubble .speaker {
+            font-weight: bold;
+            font-size: 0.85rem;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        /* Features */
+        .features-section {
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .features-section h2 {
+            text-align: center;
+            color: #f1faee;
+            margin-bottom: 40px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #2ecc71;
+        }
+
+        .feature-card h3 {
+            color: #2ecc71;
+            margin-bottom: 10px;
+        }
+
+        /* The Point */
+        .point-section {
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .point-section h2 {
+            font-size: 2.5rem;
+            color: #e63946;
+            margin-bottom: 30px;
+        }
+
+        .point-text {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            color: #a8dadc;
+        }
+
+        .orchestrator-diagram {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 600px;
+            margin: 40px auto;
+            font-family: monospace;
+            text-align: left;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .orchestrator-diagram .highlight {
+            color: #2ecc71;
+        }
+
+        .final-message {
+            background: linear-gradient(135deg, #e63946 0%, #c1121f 100%);
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .final-message h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .final-message p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #e63946;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 30px;
+            transition: transform 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #a8dadc;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 12px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>GraphQL Demo</h1>
+        <p class="subtitle">"Your resume doesn't show GraphQL experience."</p>
+        <div class="timer-badge">Built in 30 Minutes</div>
+    </div>
+
+    <section class="comparison-section">
+        <div class="container">
+            <h2>The Job Requirements vs. Reality</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Their Requirement</th>
+                        <th>My Actual Experience</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="requirement">6+ years C# / .NET Core</td>
+                        <td class="reality">26 years of continuous development</td>
+                    </tr>
+                    <tr>
+                        <td class="requirement">Strong experience with Azure Functions</td>
+                        <td class="reality">400+ Azure Functions in production</td>
+                    </tr>
+                    <tr>
+                        <td class="requirement">Azure API Management</td>
+                        <td class="reality">Acting CTO managing entire Azure infrastructure</td>
+                    </tr>
+                    <tr>
+                        <td class="requirement">RESTful API design, OAuth, JWT</td>
+                        <td class="reality">Built integrations for Comcast, AT&T, Verizon, Charter</td>
+                    </tr>
+                    <tr>
+                        <td class="requirement">CI/CD pipelines (GitHub Actions)</td>
+                        <td class="reality">Run DevOps for a $300M company</td>
+                    </tr>
+                    <tr>
+                        <td class="requirement">SQL/NoSQL databases</td>
+                        <td class="reality">97+ Cosmos containers, SQL Server expert</td>
+                    </tr>
+                    <tr>
+                        <td class="requirement">Application Insights & Log Analytics</td>
+                        <td class="reality">Literally the CTO. Yes, I use observability.</td>
+                    </tr>
+                    <tr>
+                        <td class="requirement" style="color: #e63946; font-weight: bold;">GraphQL would be nice</td>
+                        <td class="reality" style="color: #e63946;">"Unfortunately, your resume doesn't show GraphQL..."</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="verdict">
+                <p class="verdict-text">"We can't move forward because GraphQL isn't on your resume."</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="comic-section">
+        <div class="container">
+            <h2>The Comic Strip: AI Orchestrator Meets Checkbox Recruiter</h2>
+            <div class="comic-strip">
+                <div class="comic-panel">
+                    <div class="panel-number">1</div>
+                    <div class="panel-title">The Setup</div>
+                    <div class="speech-bubble recruiter">
+                        <div class="speaker">Recruiter:</div>
+                        "Hi! Great opportunity! 6+ years .NET, Azure Functions, CI/CD, APIs..."
+                    </div>
+                    <div class="speech-bubble internal">
+                        <div class="speaker">Tom (internally):</div>
+                        "26 years. 400+ functions. I run a $300M company's tech stack."
+                    </div>
+                </div>
+
+                <div class="comic-panel">
+                    <div class="panel-number">2</div>
+                    <div class="panel-title">The Checklist</div>
+                    <div class="speech-bubble recruiter">
+                        <div class="speaker">Recruiter:</div>
+                        *scanning resume with magnifying glass*<br><br>
+                        "C#... check. Azure... check. APIs... check. Hmm..."
+                    </div>
+                </div>
+
+                <div class="comic-panel">
+                    <div class="panel-number">3</div>
+                    <div class="panel-title">The Absurdity</div>
+                    <div class="speech-bubble recruiter">
+                        <div class="speaker">Recruiter:</div>
+                        "I don't see GraphQL listed. Unfortunately we can't move forward."
+                    </div>
+                    <div class="speech-bubble">
+                        <div class="speaker">Tom:</div>
+                        "I'm an AI Orchestrator. I direct AI agents that built a 52,000+ line platform."
+                    </div>
+                    <div class="speech-bubble recruiter">
+                        <div class="speaker">Recruiter:</div>
+                        "But do you know GraphQL?"
+                    </div>
+                </div>
+
+                <div class="comic-panel">
+                    <div class="panel-number">4</div>
+                    <div class="panel-title">30 Minutes Later</div>
+                    <div class="speech-bubble">
+                        <div class="speaker">Tom:</div>
+                        *presents this repository*<br><br>
+                        "I do now. Built it in 30 minutes. While we were on this call."
+                    </div>
+                    <div class="speech-bubble recruiter">
+                        <div class="speaker">Recruiter:</div>
+                        "...but is it on your resume?"
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-section">
+        <div class="container">
+            <h2>What This "30-Minute Demo" Actually Contains</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>600+ Lines of Schema</h3>
+                    <p>Custom scalars, enums, complex types, pagination, input validation</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Relay-Style Pagination</h3>
+                    <p>Cursor-based pagination with edges, nodes, and pageInfo</p>
+                </div>
+                <div class="feature-card">
+                    <h3>State Machine Workflow</h3>
+                    <p>Grant lifecycle: PENDING → APPROVED → FUNDED (or REJECTED)</p>
+                </div>
+                <div class="feature-card">
+                    <h3>4 Core Entities</h3>
+                    <p>Ministry, Donor, GivingFund, Grant with full relationships</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Full CRUD Operations</h3>
+                    <p>15+ queries and mutations with proper error handling</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Dashboard Aggregation</h3>
+                    <p>Real-time statistics across all entities</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="point-section">
+        <div class="container">
+            <h2>The Actual Point</h2>
+            <p class="point-text">
+                The question "Do you know GraphQL?" is now equivalent to asking:<br>
+                "Can you read documentation for 10 minutes?"<br>
+                "Can you ask an AI to help you build something?"
+            </p>
+
+            <div class="orchestrator-diagram">
+                <span class="highlight">Tom Hundley (AI Orchestrator)</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;│<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;├──→ Claude Opus (Architecture)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;├──→ Gemini Pro (APIs & Database)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;└──→ ChatGPT (Content & Testing)<br>
+                <br>
+                <span class="highlight">Result:</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;• 52,130+ lines of production TypeScript<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;• 95 blog articles<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;• Full enterprise platform<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;• Any technology, on demand
+            </div>
+
+            <p class="point-text">
+                <strong>Checkbox recruiting is dead.</strong><br><br>
+                An AI-enabled developer doesn't need "5 years of GraphQL experience."<br>
+                They need architectural understanding, learning velocity, and AI orchestration skills.
+            </p>
+        </div>
+    </section>
+
+    <section class="final-message">
+        <h2>Yes, I Know GraphQL Now</h2>
+        <p>Please update your spreadsheet.</p>
+        <a href="/graphql" class="cta-button">Try the GraphQL Playground</a>
+    </section>
+
+    <footer>
+        <p>
+            Built with coffee, righteous indignation, and Claude<br><br>
+            <a href="https://elegantsoftwaresolutions.com">Elegant Software Solutions</a> |
+            <a href="https://thomashundley.com">Tom Hundley</a>
+        </p>
+    </footer>
+</body>
+</html>
