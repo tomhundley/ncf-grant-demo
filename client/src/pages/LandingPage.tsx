@@ -165,7 +165,7 @@ export function LandingPage() {
       {/* Main Content */}
       <div className="relative flex flex-col min-h-screen">
         {/* Hero Section */}
-        <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 text-center">
+        <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 pb-24 md:pb-0 text-center">
           {/* Demo Badge */}
           <div className="mb-6 animate-fade-in-up">
             <span className="inline-block px-4 py-1.5 bg-cyber-gold-500/20 border border-cyber-gold-500/40 rounded-full text-cyber-gold-400 text-sm font-medium uppercase tracking-wider">

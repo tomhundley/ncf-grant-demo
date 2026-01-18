@@ -166,64 +166,102 @@ export function Dashboard() {
             No pending grant requests. System clear.
           </p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-white/10">
-              <thead>
-                <tr>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
-                    Ministry
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
-                    From Fund
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
-                    Amount
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
-                    Purpose
-                  </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/10">
-                {pendingGrants.map(
-                  (grant: {
-                    id: number;
-                    amount: string;
-                    purpose: string;
-                    status: string;
-                    ministry: { id: number; name: string };
-                    givingFund: { id: number; name: string };
-                  }) => (
-                    <tr
-                      key={grant.id}
-                      className="hover:bg-white/5 transition-colors"
-                    >
-                      <td className="px-4 py-4 whitespace-nowrap">
-                        <span className="font-bold text-white">
-                          {grant.ministry.name}
-                        </span>
-                      </td>
-                      <td className="px-4 py-4 whitespace-nowrap text-sm text-slate-300">
-                        {grant.givingFund.name}
-                      </td>
-                      <td className="px-4 py-4 whitespace-nowrap text-sm font-bold text-cyber-gold-400">
-                        {formatCurrency(grant.amount)}
-                      </td>
-                      <td className="px-4 py-4 text-sm text-slate-400 max-w-xs truncate">
-                        {grant.purpose}
-                      </td>
-                      <td className="px-4 py-4 whitespace-nowrap">
-                        <GrantStatusBadge status={grant.status} />
-                      </td>
-                    </tr>
-                  ),
-                )}
-              </tbody>
-            </table>
-          </div>
+          <>
+            {/* Mobile Card View */}
+            <div className="md:hidden space-y-4">
+              {pendingGrants.map(
+                (grant: {
+                  id: number;
+                  amount: string;
+                  purpose: string;
+                  status: string;
+                  ministry: { id: number; name: string };
+                  givingFund: { id: number; name: string };
+                }) => (
+                  <div
+                    key={grant.id}
+                    className="bg-midnight-900/50 border border-white/10 rounded-xl p-4"
+                  >
+                    <div className="flex justify-between items-start mb-3">
+                      <span className="font-bold text-white">
+                        {grant.ministry.name}
+                      </span>
+                      <GrantStatusBadge status={grant.status} />
+                    </div>
+                    <div className="text-2xl font-bold text-cyber-gold-400 mb-2">
+                      {formatCurrency(grant.amount)}
+                    </div>
+                    <div className="text-sm text-slate-400 mb-2">
+                      {grant.purpose}
+                    </div>
+                    <div className="text-xs text-slate-500">
+                      From: <span className="text-slate-300">{grant.givingFund.name}</span>
+                    </div>
+                  </div>
+                ),
+              )}
+            </div>
+
+            {/* Desktop Table View */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="min-w-full divide-y divide-white/10">
+                <thead>
+                  <tr>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      Ministry
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      From Fund
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      Amount
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      Purpose
+                    </th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/10">
+                  {pendingGrants.map(
+                    (grant: {
+                      id: number;
+                      amount: string;
+                      purpose: string;
+                      status: string;
+                      ministry: { id: number; name: string };
+                      givingFund: { id: number; name: string };
+                    }) => (
+                      <tr
+                        key={grant.id}
+                        className="hover:bg-white/5 transition-colors"
+                      >
+                        <td className="px-4 py-4 whitespace-nowrap">
+                          <span className="font-bold text-white">
+                            {grant.ministry.name}
+                          </span>
+                        </td>
+                        <td className="px-4 py-4 whitespace-nowrap text-sm text-slate-300">
+                          {grant.givingFund.name}
+                        </td>
+                        <td className="px-4 py-4 whitespace-nowrap text-sm font-bold text-cyber-gold-400">
+                          {formatCurrency(grant.amount)}
+                        </td>
+                        <td className="px-4 py-4 text-sm text-slate-400 max-w-xs truncate">
+                          {grant.purpose}
+                        </td>
+                        <td className="px-4 py-4 whitespace-nowrap">
+                          <GrantStatusBadge status={grant.status} />
+                        </td>
+                      </tr>
+                    ),
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
     </div>

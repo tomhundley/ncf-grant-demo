@@ -440,10 +440,10 @@ export function MinistriesPage() {
 
       {/* Ministry Form Modal */}
       {isFormOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[60] flex items-start md:items-center justify-center p-4 pt-20 md:pt-4 pb-20 md:pb-4 overflow-y-auto">
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm"
             onClick={() => setIsFormOpen(false)}
           ></div>
 
@@ -460,7 +460,7 @@ export function MinistriesPage() {
                 &times;
               </button>
             </div>
-            <div className="p-6 max-h-[80vh] overflow-y-auto">
+            <div className="p-6 pb-20 md:pb-6 max-h-[70vh] md:max-h-[80vh] overflow-y-auto">
               <MinistryForm
                 ministry={editingMinistry}
                 onSubmit={handleSubmit}
