@@ -16,6 +16,7 @@ import { LoadingSpinner } from "../components/LoadingSpinner";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { GrantRequestForm } from "../components/GrantRequestForm";
 import { ViewToggle } from "../components/ViewToggle";
+import { ExportModal } from "../components/ExportModal";
 
 /**
  * Format currency helper
@@ -37,6 +38,7 @@ export function GrantsPage() {
   const [viewMode, setViewMode] = useState<'card' | 'list'>('card');
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [isCreating, setIsCreating] = useState(false);
+  const [isExportOpen, setIsExportOpen] = useState(false);
 
   // Data fetching
   const { data, loading, error } = useQuery(LIST_GRANTS, {
@@ -144,18 +146,36 @@ export function GrantsPage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="input-premium py-2 pl-3 pr-8 rounded-lg focus:ring-electric-blue-500"
-          >
-            <option value="ALL">All Statuses</option>
-            <option value="PENDING">Pending</option>
-            <option value="APPROVED">Approved</option>
-            <option value="REJECTED">Rejected</option>
-          </select>
+          <div className="relative">
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="input-premium py-2 pl-3 pr-10 rounded-lg focus:ring-electric-blue-500 appearance-none cursor-pointer"
+            >
+              <option value="ALL">All Statuses</option>
+              <option value="PENDING">Pending</option>
+              <option value="APPROVED">Approved</option>
+              <option value="REJECTED">Rejected</option>
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+              <svg className="h-5 w-5 text-slate-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </div>
+          </div>
 
           <ViewToggle viewMode={viewMode} onViewChange={setViewMode} />
+
+          <button
+            onClick={() => setIsExportOpen(true)}
+            disabled={grants.length === 0}
+            className="btn-outline py-2 px-4 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Export
+          </button>
 
           <button
             onClick={() => setIsCreating(true)}
@@ -372,6 +392,32 @@ export function GrantsPage() {
           No grants found matching criteria.
         </div>
       )}
+
+      {/* Export Modal */}
+      <ExportModal
+        isOpen={isExportOpen}
+        onClose={() => setIsExportOpen(false)}
+        title="Grants"
+        data={
+          grants.map((grant: any) => ({
+            ministry: grant.ministry.name,
+            amount: grant.amount,
+            purpose: grant.purpose,
+            status: grant.status,
+            givingFund: grant.givingFund.name,
+            createdAt: grant.createdAt || "",
+          }))
+        }
+        columns={[
+          { key: "ministry", label: "Ministry" },
+          { key: "amount", label: "Amount" },
+          { key: "purpose", label: "Purpose" },
+          { key: "status", label: "Status" },
+          { key: "givingFund", label: "Giving Fund" },
+          { key: "createdAt", label: "Created At" },
+        ]}
+        defaultFilename="grants-export"
+      />
     </div>
   );
 }

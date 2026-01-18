@@ -43,26 +43,29 @@ export function DemoLayout() {
               to="/grants-landing"
               className="flex items-center space-x-3 hover:opacity-80 transition-opacity"
             >
-              <div className="w-10 h-10 bg-gradient-to-br from-electric-blue-500 to-electric-blue-700 rounded-lg shadow-lg shadow-electric-blue-500/20 flex items-center justify-center">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
+              <div className="w-10 h-10 rounded-lg shadow-lg shadow-electric-blue-500/20 overflow-hidden ring-2 ring-electric-blue-500/30">
+                <img
+                  src="/tom-hundley.jpg"
+                  alt="Tom Hundley"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div>
                 <h1 className="text-lg font-bold tracking-wide text-slate-900 dark:text-white">
                   NCF Grant <span className="text-electric-blue-500 dark:text-electric-blue-400">Demo</span>
                 </h1>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Premium Console</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  a demo by{" "}
+                  <a
+                    href="https://tomhundley.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-electric-blue-500 hover:text-electric-blue-400 transition-colors"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    Tom Hundley
+                  </a>
+                </p>
               </div>
             </Link>
 
@@ -131,7 +134,17 @@ export function DemoLayout() {
               NCF Grant Management Demo &mdash; Built with React, Apollo Client,
               and GraphQL
             </p>
-            <p className="text-sm text-slate-400 dark:text-slate-600">By Tom Hundley</p>
+            <p className="text-sm text-slate-400 dark:text-slate-600">
+              By{" "}
+              <a
+                href="https://tomhundley.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-electric-blue-500 hover:text-electric-blue-400 transition-colors"
+              >
+                Tom Hundley
+              </a>
+            </p>
           </div>
         </div>
       </footer>

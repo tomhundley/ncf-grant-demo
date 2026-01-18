@@ -131,13 +131,41 @@
 
   /* Input Fields - theme-aware */
   .input-premium {
-    @apply rounded-xl focus:border-electric-blue-500 focus:ring-2 focus:ring-electric-blue-500/20 transition-all duration-200;
+    @apply px-4 py-2.5 rounded-xl focus:border-electric-blue-500 focus:ring-2 focus:ring-electric-blue-500/20 transition-all duration-200;
     background-color: var(--color-bg-secondary);
     border: 1px solid var(--color-border);
     color: var(--color-text-primary);
   }
   .input-premium::placeholder {
     color: var(--color-text-muted);
+  }
+
+  /* Premium Select Dropdown */
+  select.input-premium {
+    @apply appearance-none cursor-pointer pr-10;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1.25rem;
+  }
+  .dark select.input-premium {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%239CA3AF'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  }
+  select.input-premium:hover {
+    border-color: var(--color-border-strong);
+  }
+  select.input-premium:focus {
+    @apply border-electric-blue-500 ring-2 ring-electric-blue-500/20;
+  }
+  select.input-premium option {
+    @apply py-3 px-4;
+    background-color: var(--color-bg-card);
+    color: var(--color-text-primary);
+  }
+  select.input-premium option:hover,
+  select.input-premium option:checked {
+    background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
   }
 }
 

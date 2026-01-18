@@ -14,6 +14,7 @@ import { ADD_FUNDS } from "../graphql/mutations";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { ViewToggle } from "../components/ViewToggle";
+import { ExportModal } from "../components/ExportModal";
 
 type GivingFund = {
   id: number;
@@ -43,6 +44,7 @@ export function DonorsPage() {
   // State for add funds modal
   const [selectedFund, setSelectedFund] = useState<GivingFund | null>(null);
   const [addAmount, setAddAmount] = useState("");
+  const [isExportOpen, setIsExportOpen] = useState(false);
 
   // Fetch donors with their giving funds
   const { data, loading, error } = useQuery(LIST_DONORS);
@@ -90,7 +92,19 @@ export function DonorsPage() {
             View donors and manage giving funds.
           </p>
         </div>
-        <ViewToggle viewMode={viewMode} onViewChange={setViewMode} />
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setIsExportOpen(true)}
+            disabled={donors.length === 0}
+            className="btn-outline py-2 px-4 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Export
+          </button>
+          <ViewToggle viewMode={viewMode} onViewChange={setViewMode} />
+        </div>
       </div>
 
       {/* Content */}
@@ -373,6 +387,34 @@ export function DonorsPage() {
           </div>
         </div>
       )}
+
+      {/* Export Modal */}
+      <ExportModal
+        isOpen={isExportOpen}
+        onClose={() => setIsExportOpen(false)}
+        title="Donors"
+        data={
+          donors.map((donor) => ({
+            firstName: donor.firstName,
+            lastName: donor.lastName,
+            email: donor.email,
+            phone: donor.phone || "",
+            totalBalance: donor.totalBalance,
+            fundsCount: donor.givingFunds.length,
+            fundNames: donor.givingFunds.map(f => f.name).join(", "),
+          }))
+        }
+        columns={[
+          { key: "firstName", label: "First Name" },
+          { key: "lastName", label: "Last Name" },
+          { key: "email", label: "Email" },
+          { key: "phone", label: "Phone" },
+          { key: "totalBalance", label: "Total Balance" },
+          { key: "fundsCount", label: "# of Funds" },
+          { key: "fundNames", label: "Fund Names" },
+        ]}
+        defaultFilename="donors-export"
+      />
     </div>
   );
 }

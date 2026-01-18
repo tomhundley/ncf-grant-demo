@@ -188,19 +188,26 @@ export function GrantRequestForm({
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 Ministry <span className="text-red-400">*</span>
               </label>
-              <select
-                name="ministryId"
-                value={formData.ministryId}
-                onChange={handleChange}
-                className={`input-premium w-full ${errors.ministryId ? 'border-red-500 focus:ring-red-500' : ''}`}
-              >
-                <option value={0}>Select a ministry</option>
-                {ministries.map((ministry) => (
-                  <option key={ministry.id} value={ministry.id}>
-                    {ministry.name}
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <select
+                  name="ministryId"
+                  value={formData.ministryId}
+                  onChange={handleChange}
+                  className={`input-premium w-full appearance-none pr-10 cursor-pointer ${errors.ministryId ? 'border-red-500 focus:ring-red-500' : ''}`}
+                >
+                  <option value={0}>Select a ministry</option>
+                  {ministries.map((ministry) => (
+                    <option key={ministry.id} value={ministry.id}>
+                      {ministry.name}
+                    </option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                  <svg className="h-5 w-5 text-slate-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </div>
+              </div>
               {errors.ministryId && (
                 <p className="mt-1 text-sm text-red-400">{errors.ministryId}</p>
               )}
@@ -211,19 +218,26 @@ export function GrantRequestForm({
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 Donor <span className="text-red-400">*</span>
               </label>
-              <select
-                name="donorId"
-                value={formData.donorId}
-                onChange={handleChange}
-                className="input-premium w-full"
-              >
-                <option value={0}>Select a donor</option>
-                {donors.map((donor) => (
-                  <option key={donor.id} value={donor.id}>
-                    {donor.firstName} {donor.lastName}
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <select
+                  name="donorId"
+                  value={formData.donorId}
+                  onChange={handleChange}
+                  className="input-premium w-full appearance-none pr-10 cursor-pointer"
+                >
+                  <option value={0}>Select a donor</option>
+                  {donors.map((donor) => (
+                    <option key={donor.id} value={donor.id}>
+                      {donor.firstName} {donor.lastName}
+                    </option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                  <svg className="h-5 w-5 text-slate-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </div>
+              </div>
             </div>
 
             {/* Giving Fund Selection */}
@@ -231,24 +245,31 @@ export function GrantRequestForm({
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 Giving Fund <span className="text-red-400">*</span>
               </label>
-              <select
-                name="givingFundId"
-                value={formData.givingFundId}
-                onChange={handleChange}
-                disabled={!formData.donorId}
-                className={`input-premium w-full ${errors.givingFundId ? 'border-red-500 focus:ring-red-500' : ''} ${
-                  !formData.donorId ? 'opacity-50 cursor-not-allowed' : ''
-                }`}
-              >
-                <option value={0}>
-                  {formData.donorId ? 'Select a fund' : 'Select a donor first'}
-                </option>
-                {givingFunds.map((fund) => (
-                  <option key={fund.id} value={fund.id}>
-                    {fund.name} ({formatCurrency(fund.balance)} available)
+              <div className="relative">
+                <select
+                  name="givingFundId"
+                  value={formData.givingFundId}
+                  onChange={handleChange}
+                  disabled={!formData.donorId}
+                  className={`input-premium w-full appearance-none pr-10 ${errors.givingFundId ? 'border-red-500 focus:ring-red-500' : ''} ${
+                    !formData.donorId ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                  }`}
+                >
+                  <option value={0}>
+                    {formData.donorId ? 'Select a fund' : 'Select a donor first'}
                   </option>
-                ))}
-              </select>
+                  {givingFunds.map((fund) => (
+                    <option key={fund.id} value={fund.id}>
+                      {fund.name} ({formatCurrency(fund.balance)} available)
+                    </option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                  <svg className="h-5 w-5 text-slate-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                  </svg>
+                </div>
+              </div>
               {errors.givingFundId && (
                 <p className="mt-1 text-sm text-red-400">{errors.givingFundId}</p>
               )}
