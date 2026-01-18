@@ -7,7 +7,7 @@
  * Refactored for the new premium dark aesthetic.
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import { LIST_MINISTRIES, GET_DASHBOARD_STATS } from "../graphql/queries";
 import {
