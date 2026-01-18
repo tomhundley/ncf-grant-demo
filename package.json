@@ -5,6 +5,7 @@
   "author": "Tom Hundley <tom@thomashundley.com>",
   "license": "MIT",
   "private": true,
+  "type": "module",
   "keywords": [
     "graphql",
     "apollo-server",
