@@ -19,11 +19,12 @@ export default defineConfig({
 
   // Development server configuration
   server: {
-    port: 3000,
+    port: 5050,
+    strictPort: true,
     // Proxy GraphQL requests to the Apollo Server
     proxy: {
       '/graphql': {
-        target: 'http://localhost:4000',
+        target: 'http://localhost:5051',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/graphql/, ''),
       },

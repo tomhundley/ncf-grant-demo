@@ -156,10 +156,10 @@ export function MinistriesPage() {
       {/* Page Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-serif font-bold text-white mb-1">
+          <h1 className="text-3xl font-serif font-bold text-slate-900 dark:text-white mb-1">
             Ministries
           </h1>
-          <p className="text-slate-400 text-sm">
+          <p className="text-slate-600 dark:text-slate-400 text-sm">
             Manage ministry organizations eligible for grants.
           </p>
         </div>
@@ -185,7 +185,7 @@ export function MinistriesPage() {
               placeholder="Search ministries..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="input-premium bg-midnight-800 border-white/10 text-slate-200 w-full"
+              className="input-premium w-full"
             />
           </div>
 
@@ -193,7 +193,7 @@ export function MinistriesPage() {
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="input-premium bg-midnight-800 border-white/10 text-slate-200 w-auto"
+            className="input-premium w-auto"
           >
             {CATEGORIES.map((cat) => (
               <option key={cat.value} value={cat.value}>
@@ -203,12 +203,12 @@ export function MinistriesPage() {
           </select>
 
           {/* Verified Filter */}
-          <label className="flex items-center space-x-2 cursor-pointer text-slate-300 hover:text-white transition-colors">
+          <label className="flex items-center space-x-2 cursor-pointer text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">
             <input
               type="checkbox"
               checked={verifiedOnly}
               onChange={(e) => setVerifiedOnly(e.target.checked)}
-              className="w-4 h-4 rounded border-slate-600 bg-midnight-800 text-electric-blue-500 focus:ring-electric-blue-500 focus:ring-offset-midnight-950"
+              className="w-4 h-4 rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-midnight-800 text-electric-blue-500 focus:ring-electric-blue-500 focus:ring-offset-white dark:focus:ring-offset-midnight-950"
             />
             <span className="text-sm font-medium">Verified only</span>
           </label>
@@ -241,11 +241,11 @@ export function MinistriesPage() {
                     {/* Card Header */}
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-bold text-white truncate group-hover:text-electric-blue-400 transition-colors">
+                        <h3 className="text-lg font-bold text-slate-900 dark:text-white truncate group-hover:text-electric-blue-600 dark:group-hover:text-electric-blue-400 transition-colors">
                           {ministry.name}
                         </h3>
                         {ministry.ein && (
-                          <p className="text-xs text-slate-500 font-mono mt-1">
+                          <p className="text-xs text-slate-500 dark:text-slate-500 font-mono mt-1">
                             EIN: {ministry.ein}
                           </p>
                         )}
@@ -282,7 +282,7 @@ export function MinistriesPage() {
                       </div>
 
                       {(ministry.city || ministry.state) && (
-                        <div className="flex items-center text-sm text-slate-400">
+                        <div className="flex items-center text-sm text-slate-600 dark:text-slate-400">
                           <svg className="w-4 h-4 mr-2 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -294,14 +294,14 @@ export function MinistriesPage() {
                       )}
 
                       {ministry.description && (
-                        <p className="text-sm text-slate-400 line-clamp-2">
+                        <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">
                           {ministry.description}
                         </p>
                       )}
                     </div>
 
                     {/* Card Actions */}
-                    <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-white/10">
+                    <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-black/10 dark:border-white/10">
                       <button
                         onClick={() => handleEdit(ministry)}
                         className="text-sm text-electric-blue-400 hover:text-electric-blue-300 font-medium transition-colors"
@@ -324,39 +324,39 @@ export function MinistriesPage() {
           {viewMode === 'list' && (
             <div className="hidden md:block glass-panel overflow-hidden p-0">
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-white/10">
-                  <thead className="bg-midnight-900/50">
+                <table className="min-w-full divide-y divide-black/10 dark:divide-white/10">
+                  <thead className="bg-slate-100/50 dark:bg-midnight-900/50">
                     <tr>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                         Ministry
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                         Category
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                         Location
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                         Total Funded
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                         Status
                       </th>
-                      <th className="px-6 py-4 text-right text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                         Actions
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-white/10">
+                  <tbody className="divide-y divide-black/10 dark:divide-white/10">
                     {data?.ministries?.edges?.map(
                       ({ node: ministry }: { node: Ministry }) => (
                         <tr
                           key={ministry.id}
-                          className="hover:bg-white/5 transition-colors"
+                          className="hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
                         >
                           <td className="px-6 py-4">
                             <div>
-                              <div className="font-bold text-white">
+                              <div className="font-bold text-slate-900 dark:text-white">
                                 {ministry.name}
                               </div>
                               {ministry.ein && (
@@ -369,11 +369,11 @@ export function MinistriesPage() {
                           <td className="px-6 py-4">
                             <CategoryBadge category={ministry.category} />
                           </td>
-                          <td className="px-6 py-4 text-sm text-slate-400">
+                          <td className="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">
                             {ministry.city && ministry.state ? (
                               `${ministry.city}, ${ministry.state}`
                             ) : (
-                              <span className="text-slate-600">—</span>
+                              <span className="text-slate-400 dark:text-slate-600">—</span>
                             )}
                           </td>
                           <td className="px-6 py-4 text-sm font-bold text-cyber-gold-400 font-serif">
@@ -429,7 +429,7 @@ export function MinistriesPage() {
             <div className="flex justify-center pt-4">
               <button
                 onClick={handleLoadMore}
-                className="btn-outline border-white/20 text-slate-300 hover:text-white hover:border-white/40"
+                className="btn-outline"
               >
                 Load More Ministries
               </button>
@@ -443,19 +443,19 @@ export function MinistriesPage() {
         <div className="fixed inset-0 z-[60] flex items-start md:items-center justify-center p-4 pt-20 md:pt-4 pb-20 md:pb-4 overflow-y-auto">
           {/* Backdrop */}
           <div
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 bg-black/50 dark:bg-black/80 backdrop-blur-sm"
             onClick={() => setIsFormOpen(false)}
           ></div>
 
           {/* Modal Content */}
-          <div className="relative z-10 w-full max-w-2xl bg-midnight-900 border border-white/20 rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up">
-            <div className="px-6 py-4 border-b border-white/10 flex justify-between items-center bg-midnight-800/50">
-              <h2 className="text-xl font-bold text-white">
+          <div className="relative z-10 w-full max-w-2xl bg-white dark:bg-midnight-900 border border-black/10 dark:border-white/20 rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up">
+            <div className="px-6 py-4 border-b border-black/10 dark:border-white/10 flex justify-between items-center bg-slate-50 dark:bg-midnight-800/50">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white">
                 {editingMinistry ? "Edit Ministry" : "Add New Ministry"}
               </h2>
               <button
                 onClick={() => setIsFormOpen(false)}
-                className="text-slate-400 hover:text-white transition-colors text-2xl leading-none"
+                className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors text-2xl leading-none"
               >
                 &times;
               </button>

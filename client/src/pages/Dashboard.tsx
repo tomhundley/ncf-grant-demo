@@ -72,10 +72,10 @@ export function Dashboard() {
     <div className="space-y-8 animate-fade-in-up">
       {/* Page Header */}
       <div>
-        <h1 className="text-3xl font-serif font-bold text-white mb-2">
+        <h1 className="text-3xl font-serif font-bold text-slate-900 dark:text-white mb-2">
           Command Center
         </h1>
-        <p className="text-slate-400">
+        <p className="text-slate-600 dark:text-slate-400">
           Real-time overview of ministry deployment and grant activity.
         </p>
       </div>
@@ -153,7 +153,7 @@ export function Dashboard() {
       {/* Pending Grants Section */}
       <div className="glass-panel p-6">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-serif font-bold text-white">
+          <h2 className="text-xl font-serif font-bold text-slate-900 dark:text-white">
             Pending Grant Requests
           </h2>
           <span className="badge-pending">
@@ -180,22 +180,22 @@ export function Dashboard() {
                 }) => (
                   <div
                     key={grant.id}
-                    className="bg-midnight-900/50 border border-white/10 rounded-xl p-4"
+                    className="bg-slate-100 dark:bg-midnight-900/50 border border-black/10 dark:border-white/10 rounded-xl p-4"
                   >
                     <div className="flex justify-between items-start mb-3">
-                      <span className="font-bold text-white">
+                      <span className="font-bold text-slate-900 dark:text-white">
                         {grant.ministry.name}
                       </span>
                       <GrantStatusBadge status={grant.status} />
                     </div>
-                    <div className="text-2xl font-bold text-cyber-gold-400 mb-2">
+                    <div className="text-2xl font-bold text-cyber-gold-500 dark:text-cyber-gold-400 mb-2">
                       {formatCurrency(grant.amount)}
                     </div>
-                    <div className="text-sm text-slate-400 mb-2">
+                    <div className="text-sm text-slate-600 dark:text-slate-400 mb-2">
                       {grant.purpose}
                     </div>
                     <div className="text-xs text-slate-500">
-                      From: <span className="text-slate-300">{grant.givingFund.name}</span>
+                      From: <span className="text-slate-700 dark:text-slate-300">{grant.givingFund.name}</span>
                     </div>
                   </div>
                 ),
@@ -204,27 +204,27 @@ export function Dashboard() {
 
             {/* Desktop Table View */}
             <div className="hidden md:block overflow-x-auto">
-              <table className="min-w-full divide-y divide-white/10">
+              <table className="min-w-full divide-y divide-black/10 dark:divide-white/10">
                 <thead>
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                       Ministry
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                       From Fund
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                       Amount
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                       Purpose
                     </th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                    <th className="px-4 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                       Status
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/10">
+                <tbody className="divide-y divide-black/10 dark:divide-white/10">
                   {pendingGrants.map(
                     (grant: {
                       id: number;
@@ -236,20 +236,20 @@ export function Dashboard() {
                     }) => (
                       <tr
                         key={grant.id}
-                        className="hover:bg-white/5 transition-colors"
+                        className="hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
                       >
                         <td className="px-4 py-4 whitespace-nowrap">
-                          <span className="font-bold text-white">
+                          <span className="font-bold text-slate-900 dark:text-white">
                             {grant.ministry.name}
                           </span>
                         </td>
-                        <td className="px-4 py-4 whitespace-nowrap text-sm text-slate-300">
+                        <td className="px-4 py-4 whitespace-nowrap text-sm text-slate-700 dark:text-slate-300">
                           {grant.givingFund.name}
                         </td>
-                        <td className="px-4 py-4 whitespace-nowrap text-sm font-bold text-cyber-gold-400">
+                        <td className="px-4 py-4 whitespace-nowrap text-sm font-bold text-cyber-gold-500 dark:text-cyber-gold-400">
                           {formatCurrency(grant.amount)}
                         </td>
-                        <td className="px-4 py-4 text-sm text-slate-400 max-w-xs truncate">
+                        <td className="px-4 py-4 text-sm text-slate-600 dark:text-slate-400 max-w-xs truncate">
                           {grant.purpose}
                         </td>
                         <td className="px-4 py-4 whitespace-nowrap">
@@ -292,12 +292,12 @@ function StatCard({
     >
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-sm font-medium text-slate-400 uppercase tracking-wider">
+          <p className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
             {title}
           </p>
           <p
             className={`mt-2 text-4xl font-bold font-serif ${
-              highlight ? "text-electric-blue-400 text-glow" : "text-white"
+              highlight ? "text-electric-blue-500 dark:text-electric-blue-400 text-glow" : "text-slate-900 dark:text-white"
             }`}
           >
             {value}
@@ -307,8 +307,8 @@ function StatCard({
         <div
           className={`p-3 rounded-xl ${
             highlight
-              ? "bg-electric-blue-500/20 text-electric-blue-400"
-              : "bg-midnight-800 text-slate-400"
+              ? "bg-electric-blue-500/20 text-electric-blue-500 dark:text-electric-blue-400"
+              : "bg-slate-200 dark:bg-midnight-800 text-slate-500 dark:text-slate-400"
           }`}
         >
           {icon}

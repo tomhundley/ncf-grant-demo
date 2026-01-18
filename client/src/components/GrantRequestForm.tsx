@@ -164,14 +164,14 @@ export function GrantRequestForm({
   const isLoading = loadingMinistries || loadingDonors;
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-midnight-900 rounded-xl shadow-2xl w-full max-w-lg border border-white/10">
+    <div className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white dark:bg-midnight-900 rounded-xl shadow-2xl w-full max-w-lg border border-black/10 dark:border-white/10">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-white/10">
-          <h2 className="text-xl font-semibold text-white">
+        <div className="px-6 py-4 border-b border-black/10 dark:border-white/10">
+          <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
             New Grant Request
           </h2>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
             Create a grant request from a giving fund to a ministry
           </p>
         </div>
@@ -185,7 +185,7 @@ export function GrantRequestForm({
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
             {/* Ministry Selection */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 Ministry <span className="text-red-400">*</span>
               </label>
               <select
@@ -208,7 +208,7 @@ export function GrantRequestForm({
 
             {/* Donor Selection */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 Donor <span className="text-red-400">*</span>
               </label>
               <select
@@ -228,7 +228,7 @@ export function GrantRequestForm({
 
             {/* Giving Fund Selection */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 Giving Fund <span className="text-red-400">*</span>
               </label>
               <select
@@ -256,11 +256,11 @@ export function GrantRequestForm({
 
             {/* Amount */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 Amount <span className="text-red-400">*</span>
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">$</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400">$</span>
                 <input
                   type="number"
                   name="amount"
@@ -276,7 +276,7 @@ export function GrantRequestForm({
                 <p className="mt-1 text-sm text-red-400">{errors.amount}</p>
               )}
               {selectedFund && (
-                <p className="mt-1 text-sm text-slate-400">
+                <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
                   Available balance: {formatCurrency(selectedFund.balance)}
                 </p>
               )}
@@ -284,7 +284,7 @@ export function GrantRequestForm({
 
             {/* Purpose */}
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 Purpose <span className="text-red-400">*</span>
               </label>
               <textarea
@@ -303,7 +303,7 @@ export function GrantRequestForm({
         )}
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-white/10 flex justify-end space-x-3">
+        <div className="px-6 py-4 border-t border-black/10 dark:border-white/10 flex justify-end space-x-3">
           <button
             type="button"
             onClick={onCancel}

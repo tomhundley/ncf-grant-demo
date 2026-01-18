@@ -136,8 +136,8 @@ export function MinistryForm({
 
   const isEditing = !!ministry;
 
-  const inputClasses = "w-full px-4 py-2.5 bg-midnight-800 border border-white/10 rounded-xl text-white placeholder-slate-500 focus:border-electric-blue-500 focus:ring-2 focus:ring-electric-blue-500/20 transition-all";
-  const labelClasses = "block text-sm font-medium text-slate-300 mb-1.5";
+  const inputClasses = "w-full px-4 py-2.5 bg-slate-50 dark:bg-midnight-800 border border-black/10 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:border-electric-blue-500 focus:ring-2 focus:ring-electric-blue-500/20 transition-all";
+  const labelClasses = "block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5";
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
@@ -273,15 +273,15 @@ export function MinistryForm({
           id="verified"
           checked={formData.verified}
           onChange={handleChange}
-          className="w-4 h-4 rounded border-slate-600 bg-midnight-800 text-electric-blue-500 focus:ring-electric-blue-500 focus:ring-offset-midnight-950"
+          className="w-4 h-4 rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-midnight-800 text-electric-blue-500 focus:ring-electric-blue-500 focus:ring-offset-white dark:focus:ring-offset-midnight-950"
         />
-        <label htmlFor="verified" className="ml-2 text-sm text-slate-300">
+        <label htmlFor="verified" className="ml-2 text-sm text-slate-700 dark:text-slate-300">
           Mark as verified (EIN has been validated)
         </label>
       </div>
 
       {/* Form Actions */}
-      <div className="flex justify-end space-x-3 pt-4 border-t border-white/10">
+      <div className="flex justify-end space-x-3 pt-4 border-t border-black/10 dark:border-white/10">
         <button
           type="button"
           onClick={onCancel}

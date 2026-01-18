@@ -35,7 +35,7 @@ import { createContext } from './context.js';
 /**
  * Server configuration
  */
-const PORT = parseInt(process.env['PORT'] ?? '4000', 10);
+const PORT = parseInt(process.env['PORT'] ?? '5051', 10);
 const NODE_ENV = process.env['NODE_ENV'] ?? 'development';
 
 /**

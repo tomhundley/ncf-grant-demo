@@ -18,8 +18,8 @@ function CodeBlock({ code, language = "graphql" }: { code: string; language?: st
   return (
     <div className="relative group">
       <div className="absolute -inset-1 bg-gradient-to-r from-electric-blue-600/20 to-purple-600/20 rounded-xl blur opacity-50 group-hover:opacity-75 transition duration-500" />
-      <pre className="relative bg-midnight-950 border border-white/10 rounded-xl p-4 overflow-x-auto">
-        <code className="text-sm font-mono text-slate-300 whitespace-pre">{code}</code>
+      <pre className="relative bg-slate-100 dark:bg-midnight-950 border border-black/10 dark:border-white/10 rounded-xl p-4 overflow-x-auto">
+        <code className="text-sm font-mono text-slate-700 dark:text-slate-300 whitespace-pre">{code}</code>
       </pre>
       <div className="absolute top-2 right-2 text-xs text-slate-500 uppercase tracking-wider">
         {language}
@@ -45,16 +45,16 @@ function TechCard({
   color: string;
 }) {
   return (
-    <div className="glass-panel p-6 hover:border-white/20 transition-all duration-300 group">
+    <div className="glass-panel p-6 hover:border-black/20 dark:hover:border-white/20 transition-all duration-300 group">
       <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${color}`}>
         {icon}
       </div>
-      <h3 className="text-xl font-bold text-white mb-2">{name}</h3>
-      <p className="text-slate-400 text-sm mb-4">{description}</p>
+      <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-2">{name}</h3>
+      <p className="text-slate-600 dark:text-slate-400 text-sm mb-4">{description}</p>
       <ul className="space-y-2">
         {features.map((feature, i) => (
-          <li key={i} className="flex items-start text-sm text-slate-300">
-            <svg className="w-4 h-4 text-neon-green-400 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <li key={i} className="flex items-start text-sm text-slate-700 dark:text-slate-300">
+            <svg className="w-4 h-4 text-neon-green-500 dark:text-neon-green-400 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
             </svg>
             {feature}
@@ -82,8 +82,8 @@ function Section({
   return (
     <section id={id} className="scroll-mt-24">
       <div className="mb-8">
-        <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-2">{title}</h2>
-        {subtitle && <p className="text-slate-400 text-lg">{subtitle}</p>}
+        <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900 dark:text-white mb-2">{title}</h2>
+        {subtitle && <p className="text-slate-600 dark:text-slate-400 text-lg">{subtitle}</p>}
       </div>
       {children}
     </section>
@@ -96,13 +96,13 @@ export function TechStackPage() {
   }, []);
 
   return (
-    <div className="min-h-screen text-white font-sans">
+    <div className="min-h-screen text-slate-900 dark:text-white font-sans">
       {/* Sticky Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-midnight-950/80 backdrop-blur-md border-b border-white/10">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-midnight-950/80 backdrop-blur-md border-b border-black/10 dark:border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link
             to="/"
-            className="group flex items-center text-electric-blue-300 hover:text-white transition-colors"
+            className="group flex items-center text-electric-blue-600 dark:text-electric-blue-300 hover:text-electric-blue-800 dark:hover:text-white transition-colors"
           >
             <svg
               className="w-5 h-5 mr-2 transform group-hover:-translate-x-1 transition-transform"
@@ -128,13 +128,13 @@ export function TechStackPage() {
 
       {/* Hero Section */}
       <section className="pt-32 pb-16 px-4 text-center">
-        <h1 className="text-4xl md:text-6xl font-serif font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-electric-blue-100 to-electric-blue-300 animate-fade-in-up">
+        <h1 className="text-4xl md:text-6xl font-serif font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-electric-blue-700 to-electric-blue-500 dark:from-white dark:via-electric-blue-100 dark:to-electric-blue-300 animate-fade-in-up">
           Tech Stack
         </h1>
-        <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed font-light animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
+        <p className="text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-3xl mx-auto leading-relaxed font-light animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
           A modern full-stack architecture built for scalability, type safety, and developer experience.
           <br />
-          <span className="text-white font-medium">Deep dive into every technology powering this demo.</span>
+          <span className="text-slate-900 dark:text-white font-medium">Deep dive into every technology powering this demo.</span>
         </p>
       </section>
 
@@ -145,7 +145,7 @@ export function TechStackPage() {
             <a
               key={tech}
               href={`#${tech.toLowerCase().replace(/\./g, "")}`}
-              className="px-4 py-2 bg-midnight-800/50 hover:bg-electric-blue-600/20 border border-white/10 hover:border-electric-blue-500/50 rounded-lg text-slate-300 hover:text-white text-sm font-medium transition-all"
+              className="px-4 py-2 bg-slate-200/50 dark:bg-midnight-800/50 hover:bg-electric-blue-600/20 border border-black/10 dark:border-white/10 hover:border-electric-blue-500/50 rounded-lg text-slate-700 dark:text-slate-300 hover:text-electric-blue-600 dark:hover:text-white text-sm font-medium transition-all"
             >
               {tech}
             </a>
@@ -210,14 +210,14 @@ export function TechStackPage() {
           <div className="space-y-12">
             {/* What is GraphQL */}
             <div className="glass-panel p-8">
-              <h3 className="text-2xl font-bold text-white mb-4">What is GraphQL?</h3>
-              <p className="text-slate-300 mb-6 leading-relaxed">
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">What is GraphQL?</h3>
+              <p className="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
                 GraphQL is a query language for your API, and a server-side runtime for executing queries. Unlike REST APIs where you have multiple endpoints returning fixed data structures, GraphQL exposes a single endpoint that lets clients request exactly the data they need—nothing more, nothing less.
               </p>
               <div className="grid md:grid-cols-2 gap-6">
-                <div className="bg-midnight-800/50 rounded-xl p-6 border border-white/5">
-                  <h4 className="text-lg font-bold text-red-400 mb-3">REST Approach</h4>
-                  <ul className="space-y-2 text-sm text-slate-400">
+                <div className="bg-slate-200/50 dark:bg-midnight-800/50 rounded-xl p-6 border border-black/5 dark:border-white/5">
+                  <h4 className="text-lg font-bold text-red-500 dark:text-red-400 mb-3">REST Approach</h4>
+                  <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-400">
                     <li>• GET /api/grants - Returns all grant fields</li>
                     <li>• GET /api/grants/1/ministry - Separate call</li>
                     <li>• GET /api/grants/1/donor - Another call</li>
@@ -225,9 +225,9 @@ export function TechStackPage() {
                     <li>• Multiple round trips to server</li>
                   </ul>
                 </div>
-                <div className="bg-midnight-800/50 rounded-xl p-6 border border-neon-green-500/20">
-                  <h4 className="text-lg font-bold text-neon-green-400 mb-3">GraphQL Approach</h4>
-                  <ul className="space-y-2 text-sm text-slate-300">
+                <div className="bg-slate-200/50 dark:bg-midnight-800/50 rounded-xl p-6 border border-neon-green-500/20">
+                  <h4 className="text-lg font-bold text-neon-green-600 dark:text-neon-green-400 mb-3">GraphQL Approach</h4>
+                  <ul className="space-y-2 text-sm text-slate-700 dark:text-slate-300">
                     <li>• Single POST /graphql endpoint</li>
                     <li>• Request exactly what you need</li>
                     <li>• Get nested related data in one call</li>
@@ -240,8 +240,8 @@ export function TechStackPage() {
 
             {/* Schema */}
             <div className="glass-panel p-8">
-              <h3 className="text-2xl font-bold text-white mb-4">The Schema</h3>
-              <p className="text-slate-300 mb-6 leading-relaxed">
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">The Schema</h3>
+              <p className="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
                 The GraphQL schema is the contract between the client and server. It defines what data can be queried and what operations can be performed. Our schema defines types for Ministries, Donors, Grants, and their relationships.
               </p>
               <CodeBlock language="graphql" code={`type Ministry {
@@ -274,15 +274,15 @@ type Grant {
 
             {/* Queries */}
             <div className="glass-panel p-8">
-              <h3 className="text-2xl font-bold text-white mb-4">Queries: Reading Data</h3>
-              <p className="text-slate-300 mb-6 leading-relaxed">
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">Queries: Reading Data</h3>
+              <p className="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
                 Queries are used to fetch data from the server. They're read-only operations that don't modify any data. In this demo, we use queries to list ministries, donors, grants, and fetch dashboard statistics.
               </p>
 
               <div className="space-y-6">
                 <div>
-                  <h4 className="text-lg font-semibold text-electric-blue-400 mb-3">Simple Query</h4>
-                  <p className="text-slate-400 text-sm mb-3">Fetch a list of ministries with specific fields:</p>
+                  <h4 className="text-lg font-semibold text-electric-blue-600 dark:text-electric-blue-400 mb-3">Simple Query</h4>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm mb-3">Fetch a list of ministries with specific fields:</p>
                   <CodeBlock code={`query ListMinistries {
   ministries(first: 10) {
     edges {
@@ -303,8 +303,8 @@ type Grant {
                 </div>
 
                 <div>
-                  <h4 className="text-lg font-semibold text-electric-blue-400 mb-3">Query with Variables</h4>
-                  <p className="text-slate-400 text-sm mb-3">Use variables to make queries dynamic and reusable:</p>
+                  <h4 className="text-lg font-semibold text-electric-blue-600 dark:text-electric-blue-400 mb-3">Query with Variables</h4>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm mb-3">Use variables to make queries dynamic and reusable:</p>
                   <CodeBlock code={`query GetMinistry($id: ID!) {
   ministry(id: $id) {
     id
@@ -327,8 +327,8 @@ type Grant {
                 </div>
 
                 <div>
-                  <h4 className="text-lg font-semibold text-electric-blue-400 mb-3">Filtering & Pagination</h4>
-                  <p className="text-slate-400 text-sm mb-3">Our API supports cursor-based pagination and filters:</p>
+                  <h4 className="text-lg font-semibold text-electric-blue-600 dark:text-electric-blue-400 mb-3">Filtering & Pagination</h4>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm mb-3">Our API supports cursor-based pagination and filters:</p>
                   <CodeBlock code={`query FilteredGrants($filter: GrantFilter, $first: Int, $after: String) {
   grants(filter: $filter, first: $first, after: $after) {
     edges {
@@ -363,15 +363,15 @@ type Grant {
 
             {/* Mutations */}
             <div className="glass-panel p-8">
-              <h3 className="text-2xl font-bold text-white mb-4">Mutations: Writing Data</h3>
-              <p className="text-slate-300 mb-6 leading-relaxed">
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">Mutations: Writing Data</h3>
+              <p className="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
                 Mutations are used to create, update, or delete data. They modify the state on the server and return the modified data. Every mutation in our API returns the affected object so you can update your local cache.
               </p>
 
               <div className="space-y-6">
                 <div>
-                  <h4 className="text-lg font-semibold text-cyber-gold-400 mb-3">Create Mutation</h4>
-                  <p className="text-slate-400 text-sm mb-3">Create a new ministry record:</p>
+                  <h4 className="text-lg font-semibold text-cyber-gold-500 dark:text-cyber-gold-400 mb-3">Create Mutation</h4>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm mb-3">Create a new ministry record:</p>
                   <CodeBlock code={`mutation CreateMinistry($input: CreateMinistryInput!) {
   createMinistry(input: $input) {
     id
@@ -396,8 +396,8 @@ type Grant {
                 </div>
 
                 <div>
-                  <h4 className="text-lg font-semibold text-cyber-gold-400 mb-3">Update Mutation</h4>
-                  <p className="text-slate-400 text-sm mb-3">Update an existing record with partial data:</p>
+                  <h4 className="text-lg font-semibold text-cyber-gold-500 dark:text-cyber-gold-400 mb-3">Update Mutation</h4>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm mb-3">Update an existing record with partial data:</p>
                   <CodeBlock code={`mutation UpdateMinistry($id: ID!, $input: UpdateMinistryInput!) {
   updateMinistry(id: $id, input: $input) {
     id
@@ -418,8 +418,8 @@ type Grant {
                 </div>
 
                 <div>
-                  <h4 className="text-lg font-semibold text-cyber-gold-400 mb-3">Delete Mutation</h4>
-                  <p className="text-slate-400 text-sm mb-3">Remove a record from the database:</p>
+                  <h4 className="text-lg font-semibold text-cyber-gold-500 dark:text-cyber-gold-400 mb-3">Delete Mutation</h4>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm mb-3">Remove a record from the database:</p>
                   <CodeBlock code={`mutation DeleteMinistry($id: ID!) {
   deleteMinistry(id: $id) {
     id
@@ -432,8 +432,8 @@ type Grant {
                 </div>
 
                 <div>
-                  <h4 className="text-lg font-semibold text-cyber-gold-400 mb-3">Grant Request Flow</h4>
-                  <p className="text-slate-400 text-sm mb-3">Create a grant request and approve it:</p>
+                  <h4 className="text-lg font-semibold text-cyber-gold-500 dark:text-cyber-gold-400 mb-3">Grant Request Flow</h4>
+                  <p className="text-slate-600 dark:text-slate-400 text-sm mb-3">Create a grant request and approve it:</p>
                   <CodeBlock code={`# Step 1: Request a grant
 mutation RequestGrant($input: RequestGrantInput!) {
   requestGrant(input: $input) {
@@ -459,8 +459,8 @@ mutation ApproveGrant($id: ID!) {
 
             {/* Connections Pattern */}
             <div className="glass-panel p-8">
-              <h3 className="text-2xl font-bold text-white mb-4">Relay Connection Pattern</h3>
-              <p className="text-slate-300 mb-6 leading-relaxed">
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">Relay Connection Pattern</h3>
+              <p className="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
                 This API implements the Relay Connection specification for pagination. This pattern provides a consistent way to paginate through large datasets using cursors instead of page numbers, which is more efficient and handles real-time data changes better.
               </p>
               <CodeBlock code={`type MinistryConnection {
@@ -480,20 +480,20 @@ type PageInfo {
   startCursor: String          # First item's cursor
   endCursor: String            # Last item's cursor
 }`} />
-              <div className="mt-6 bg-midnight-800/50 rounded-xl p-6 border border-white/5">
-                <h4 className="text-lg font-semibold text-white mb-3">Why Cursors Over Offsets?</h4>
-                <ul className="space-y-2 text-sm text-slate-300">
+              <div className="mt-6 bg-slate-200/50 dark:bg-midnight-800/50 rounded-xl p-6 border border-black/5 dark:border-white/5">
+                <h4 className="text-lg font-semibold text-slate-900 dark:text-white mb-3">Why Cursors Over Offsets?</h4>
+                <ul className="space-y-2 text-sm text-slate-700 dark:text-slate-300">
                   <li className="flex items-start">
-                    <span className="text-neon-green-400 mr-2">•</span>
-                    <span><strong className="text-white">Stable pagination:</strong> New items don't cause duplicates or skipped items</span>
+                    <span className="text-neon-green-500 dark:text-neon-green-400 mr-2">•</span>
+                    <span><strong className="text-slate-900 dark:text-white">Stable pagination:</strong> New items don't cause duplicates or skipped items</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-neon-green-400 mr-2">•</span>
-                    <span><strong className="text-white">Performance:</strong> Database can use indexes efficiently with cursors</span>
+                    <span className="text-neon-green-500 dark:text-neon-green-400 mr-2">•</span>
+                    <span><strong className="text-slate-900 dark:text-white">Performance:</strong> Database can use indexes efficiently with cursors</span>
                   </li>
                   <li className="flex items-start">
-                    <span className="text-neon-green-400 mr-2">•</span>
-                    <span><strong className="text-white">Real-time friendly:</strong> Works well with live data updates</span>
+                    <span className="text-neon-green-500 dark:text-neon-green-400 mr-2">•</span>
+                    <span><strong className="text-slate-900 dark:text-white">Real-time friendly:</strong> Works well with live data updates</span>
                   </li>
                 </ul>
               </div>
@@ -501,8 +501,8 @@ type PageInfo {
 
             {/* Apollo Client */}
             <div className="glass-panel p-8">
-              <h3 className="text-2xl font-bold text-white mb-4">Apollo Client Integration</h3>
-              <p className="text-slate-300 mb-6 leading-relaxed">
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4">Apollo Client Integration</h3>
+              <p className="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
                 We use Apollo Client on the frontend to manage GraphQL operations. It provides intelligent caching, optimistic updates, and seamless React integration through hooks.
               </p>
               <CodeBlock language="typescript" code={`// Using Apollo hooks in React components
@@ -542,7 +542,7 @@ function MinistriesPage() {
         {/* React Section */}
         <Section id="react" title="React Architecture" subtitle="Component-driven UI development">
           <div className="glass-panel p-8">
-            <p className="text-slate-300 mb-6 leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
               The frontend is built with React 18, using functional components and hooks throughout. The application structure follows a feature-based organization with shared components for consistency.
             </p>
             <CodeBlock language="typescript" code={`// Project structure
@@ -570,7 +570,7 @@ src/
         {/* TypeScript Section */}
         <Section id="typescript" title="TypeScript" subtitle="Type safety across the stack">
           <div className="glass-panel p-8">
-            <p className="text-slate-300 mb-6 leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
               TypeScript provides end-to-end type safety. The GraphQL schema generates types that are used both on the server (resolvers) and client (React components), ensuring consistency across the entire application.
             </p>
             <CodeBlock language="typescript" code={`// Generated types from GraphQL schema
@@ -602,7 +602,7 @@ interface MinistryCardProps {
         {/* Node.js Section */}
         <Section id="nodejs" title="Node.js Backend" subtitle="Server-side GraphQL with Apollo Server">
           <div className="glass-panel p-8">
-            <p className="text-slate-300 mb-6 leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
               The backend runs on Node.js with Apollo Server, providing the GraphQL API. Resolvers handle data fetching from PostgreSQL, with proper connection pooling and query optimization.
             </p>
             <CodeBlock language="typescript" code={`// Apollo Server setup
@@ -649,7 +649,7 @@ const resolvers = {
         {/* PostgreSQL Section */}
         <Section id="postgresql" title="PostgreSQL Database" subtitle="Relational data with referential integrity">
           <div className="glass-panel p-8">
-            <p className="text-slate-300 mb-6 leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
               PostgreSQL stores all application data with proper foreign key constraints ensuring referential integrity. The schema supports the complex relationships between ministries, donors, and grants.
             </p>
             <CodeBlock language="sql" code={`-- Database schema
@@ -698,7 +698,7 @@ CREATE INDEX idx_ministries_category ON ministries(category);`} />
         {/* Tailwind Section */}
         <Section id="tailwind" title="Tailwind CSS" subtitle="Utility-first styling with custom theme">
           <div className="glass-panel p-8">
-            <p className="text-slate-300 mb-6 leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
               Tailwind CSS powers the premium dark theme with custom colors, animations, and component classes. The utility-first approach allows rapid UI development while maintaining design consistency.
             </p>
             <CodeBlock language="javascript" code={`// tailwind.config.cjs - Custom theme
@@ -752,29 +752,29 @@ module.exports = {
         </Section>
 
         {/* Final CTA */}
-        <div className="bg-gradient-to-br from-midnight-900 to-midnight-800 rounded-3xl p-8 md:p-16 text-center border border-white/10 shadow-2xl relative overflow-hidden group">
+        <div className="bg-gradient-to-br from-slate-100 to-slate-200 dark:from-midnight-900 dark:to-midnight-800 rounded-3xl p-8 md:p-16 text-center border border-black/10 dark:border-white/10 shadow-2xl relative overflow-hidden group">
           <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-electric-blue-500 rounded-full blur-[100px] opacity-20 group-hover:opacity-30 transition-opacity" />
           <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-purple-500 rounded-full blur-[100px] opacity-20 group-hover:opacity-30 transition-opacity" />
 
-          <h2 className="relative text-3xl md:text-5xl font-serif font-bold text-white mb-6">
+          <h2 className="relative text-3xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white mb-6">
             Ready to Explore?
           </h2>
-          <p className="relative text-lg text-slate-300 mb-10 max-w-2xl mx-auto">
+          <p className="relative text-lg text-slate-600 dark:text-slate-300 mb-10 max-w-2xl mx-auto">
             See these technologies in action with the live demo, or dive into the API with Apollo Sandbox.
           </p>
 
           <div className="relative flex flex-col sm:flex-row justify-center gap-4">
             <Link
-              to="/demo"
+              to="/"
               className="btn-primary text-lg px-10 py-4"
             >
-              Launch Demo
+              Back to Home
             </Link>
             <a
               href="/docs/api/index.html"
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-outline border-white/20 text-white hover:bg-white hover:text-midnight-900"
+              className="btn-outline border-black/20 dark:border-white/20 text-slate-900 dark:text-white hover:bg-slate-900 dark:hover:bg-white hover:text-white dark:hover:text-midnight-900"
             >
               View API Docs
             </a>

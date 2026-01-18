@@ -41,13 +41,13 @@ export function StoryPage() {
   }, []);
 
   return (
-    <div className="min-h-screen text-white font-sans">
+    <div className="min-h-screen text-slate-900 dark:text-white font-sans">
       {/* Sticky Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-midnight-950/80 backdrop-blur-md border-b border-white/10">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-midnight-950/80 backdrop-blur-md border-b border-black/10 dark:border-white/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link
             to="/"
-            className="group flex items-center text-electric-blue-300 hover:text-white transition-colors"
+            className="group flex items-center text-electric-blue-600 dark:text-electric-blue-300 hover:text-electric-blue-800 dark:hover:text-white transition-colors"
           >
             <svg
               className="w-5 h-5 mr-2 transform group-hover:-translate-x-1 transition-transform"
@@ -80,16 +80,16 @@ export function StoryPage() {
 
       {/* Hero Title */}
       <section className="pt-32 pb-16 px-4 text-center">
-        <h1 className="text-4xl md:text-6xl font-serif font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-electric-blue-100 to-electric-blue-300 animate-fade-in-up">
+        <h1 className="text-4xl md:text-6xl font-serif font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-electric-blue-700 to-electric-blue-500 dark:from-white dark:via-electric-blue-100 dark:to-electric-blue-300 animate-fade-in-up">
           The Story
         </h1>
         <p
-          className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed font-light animate-fade-in-up"
+          className="text-lg md:text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto leading-relaxed font-light animate-fade-in-up"
           style={{ animationDelay: "0.1s" }}
         >
           How AI orchestration transforms the way we build software.
           <br />
-          <span className="text-white font-medium">A comic strip about the problem this demo solves.</span>
+          <span className="text-slate-900 dark:text-white font-medium">A comic strip about the problem this demo solves.</span>
         </p>
       </section>
 
@@ -108,7 +108,7 @@ export function StoryPage() {
               {/* Glow effect */}
               <div className="absolute -inset-1 bg-gradient-to-r from-electric-blue-600 to-neon-green-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
 
-              <div className="relative bg-midnight-900 rounded-xl overflow-hidden shadow-2xl border border-white/10">
+              <div className="relative bg-white dark:bg-midnight-900 rounded-xl overflow-hidden shadow-2xl border border-black/10 dark:border-white/10">
                 <img
                   src={panel.src}
                   alt={panel.alt}
@@ -121,27 +121,27 @@ export function StoryPage() {
         ))}
 
         {/* Final CTA */}
-        <div className="bg-gradient-to-br from-midnight-900 to-midnight-800 rounded-3xl p-8 md:p-16 text-center border border-white/10 shadow-2xl relative overflow-hidden group">
+        <div className="bg-gradient-to-br from-slate-100 to-slate-200 dark:from-midnight-900 dark:to-midnight-800 rounded-3xl p-8 md:p-16 text-center border border-black/10 dark:border-white/10 shadow-2xl relative overflow-hidden group">
           <div className="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-cyber-gold-500 rounded-full blur-[100px] opacity-20 group-hover:opacity-30 transition-opacity"></div>
           <div className="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-neon-green-500 rounded-full blur-[100px] opacity-20 group-hover:opacity-30 transition-opacity"></div>
 
-          <h2 className="relative text-3xl md:text-5xl font-serif font-bold text-white mb-6">
+          <h2 className="relative text-3xl md:text-5xl font-serif font-bold text-slate-900 dark:text-white mb-6">
             See It In Action
           </h2>
-          <p className="relative text-lg text-slate-300 mb-10 max-w-2xl mx-auto">
+          <p className="relative text-lg text-slate-600 dark:text-slate-300 mb-10 max-w-2xl mx-auto">
             A fully functional grant management system, built with AI orchestration.
           </p>
 
           <div className="relative flex flex-col sm:flex-row justify-center gap-4">
             <Link
-              to="/demo"
+              to="/"
               className="btn-primary text-lg px-10 py-4 bg-neon-green-600 hover:bg-neon-green-500 shadow-neon-green-600/30 text-white border-0"
             >
-              Launch Interactive Demo
+              Back to Home
             </Link>
             <a
               href="/docs/api/index.html"
-              className="btn-outline border-white/20 text-white hover:bg-white hover:text-midnight-900"
+              className="btn-outline border-black/20 dark:border-white/20 text-slate-900 dark:text-white hover:bg-slate-900 dark:hover:bg-white hover:text-white dark:hover:text-midnight-900"
             >
               Explore the API Schema
             </a>

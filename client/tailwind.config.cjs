@@ -11,6 +11,7 @@
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   safelist: [
     // Street sign colors - dynamically applied so must be safelisted

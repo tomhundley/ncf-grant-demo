@@ -4,9 +4,52 @@
 @tailwind components;
 @tailwind utilities;
 
+/* =============================================================================
+   Theme CSS Variables
+   ============================================================================= */
+:root {
+  /* Light theme (default) */
+  --color-bg-primary: #f8fafc;      /* slate-50 */
+  --color-bg-secondary: #f1f5f9;    /* slate-100 */
+  --color-bg-card: #ffffff;
+  --color-bg-header: rgba(241, 245, 249, 0.9);
+  --color-text-primary: #0f172a;    /* slate-900 */
+  --color-text-secondary: #475569;  /* slate-600 */
+  --color-text-muted: #64748b;      /* slate-500 */
+  --color-border: rgba(0, 0, 0, 0.1);
+  --color-border-strong: rgba(0, 0, 0, 0.15);
+  --color-overlay: rgba(248, 250, 252, 0.8);
+  --color-glass-bg: rgba(255, 255, 255, 0.7);
+  --color-glass-border: rgba(0, 0, 0, 0.08);
+  --scrollbar-track: #f1f5f9;
+  --scrollbar-thumb: #cbd5e1;
+  --scrollbar-thumb-hover: #3b82f6;
+}
+
+.dark {
+  /* Dark theme */
+  --color-bg-primary: #020617;      /* midnight-950 */
+  --color-bg-secondary: #0f172a;    /* midnight-900 */
+  --color-bg-card: #1e293b;         /* midnight-800 */
+  --color-bg-header: rgba(15, 23, 42, 0.8);
+  --color-text-primary: #f8fafc;    /* slate-50 */
+  --color-text-secondary: #94a3b8;  /* slate-400 */
+  --color-text-muted: #64748b;      /* slate-500 */
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-strong: rgba(255, 255, 255, 0.15);
+  --color-overlay: rgba(2, 6, 23, 0.8);
+  --color-glass-bg: rgba(15, 23, 42, 0.4);
+  --color-glass-border: rgba(255, 255, 255, 0.1);
+  --scrollbar-track: #020617;
+  --scrollbar-thumb: #1e293b;
+  --scrollbar-thumb-hover: #3b82f6;
+}
+
 @layer base {
   body {
-    @apply bg-midnight-950 text-slate-200 antialiased font-sans overflow-x-hidden;
+    @apply antialiased font-sans overflow-x-hidden transition-colors duration-300;
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-secondary);
   }
 
   h1,
@@ -15,7 +58,8 @@
   h4,
   h5,
   h6 {
-    @apply font-serif text-white tracking-tight;
+    @apply font-serif tracking-tight;
+    color: var(--color-text-primary);
   }
 }
 
@@ -36,13 +80,19 @@
 }
 
 @layer components {
-  /* Premium Glassmorphism Panel */
+  /* Premium Glassmorphism Panel - theme-aware */
   .glass-panel {
-    @apply bg-midnight-900/40 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl transition-all duration-300;
+    @apply backdrop-blur-xl rounded-2xl shadow-xl transition-all duration-300;
+    background-color: var(--color-glass-bg);
+    border: 1px solid var(--color-glass-border);
   }
 
   .glass-panel-hover {
-    @apply hover:bg-midnight-800/60 hover:border-electric-blue-500/30 hover:shadow-glow-blue hover:-translate-y-1;
+    @apply hover:shadow-glow-blue hover:-translate-y-1;
+  }
+  .glass-panel-hover:hover {
+    background-color: var(--color-bg-card);
+    border-color: rgba(59, 130, 246, 0.3);
   }
 
   /* Primary Action Button - Glowing */
@@ -50,9 +100,16 @@
     @apply inline-flex items-center justify-center px-6 py-3 rounded-xl bg-electric-blue-600 text-white font-bold tracking-wide shadow-lg shadow-electric-blue-600/25 transition-all duration-300 hover:bg-electric-blue-500 hover:shadow-glow-blue hover:-translate-y-0.5 focus:ring-4 focus:ring-electric-blue-600/20 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
-  /* Secondary/Outline Button */
+  /* Secondary/Outline Button - theme-aware */
   .btn-outline {
-    @apply inline-flex items-center justify-center px-6 py-3 rounded-xl border border-white/20 text-slate-300 font-medium bg-transparent transition-all duration-300 hover:border-white/40 hover:text-white hover:bg-white/5 hover:-translate-y-0.5 focus:ring-4 focus:ring-white/10;
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-xl font-medium bg-transparent transition-all duration-300 hover:-translate-y-0.5;
+    border: 1px solid var(--color-border-strong);
+    color: var(--color-text-secondary);
+  }
+  .btn-outline:hover {
+    border-color: var(--color-border);
+    color: var(--color-text-primary);
+    background-color: var(--color-glass-bg);
   }
 
   /* Status Badges */
@@ -61,34 +118,40 @@
   }
 
   .badge-pending {
-    @apply badge bg-yellow-500/10 text-yellow-400 border border-yellow-500/20;
+    @apply badge bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 border border-yellow-500/20;
   }
 
   .badge-success {
-    @apply badge bg-neon-green-500/10 text-neon-green-400 border border-neon-green-500/20;
+    @apply badge bg-neon-green-500/10 text-neon-green-600 dark:text-neon-green-400 border border-neon-green-500/20;
   }
 
   .badge-error {
-    @apply badge bg-red-500/10 text-red-400 border border-red-500/20;
+    @apply badge bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20;
   }
 
-  /* Input Fields */
+  /* Input Fields - theme-aware */
   .input-premium {
-    @apply bg-midnight-950/50 border border-white/10 text-white placeholder-slate-500 rounded-xl focus:border-electric-blue-500 focus:ring-2 focus:ring-electric-blue-500/20 transition-all duration-200;
+    @apply rounded-xl focus:border-electric-blue-500 focus:ring-2 focus:ring-electric-blue-500/20 transition-all duration-200;
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+  }
+  .input-premium::placeholder {
+    color: var(--color-text-muted);
   }
 }
 
-/* Custom Scrollbar for sleekness */
+/* Custom Scrollbar - theme-aware */
 ::-webkit-scrollbar {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #020617;
+  background: var(--scrollbar-track);
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: var(--scrollbar-thumb);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3b82f6;
+  background: var(--scrollbar-thumb-hover);
 }

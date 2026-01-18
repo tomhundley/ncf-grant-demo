@@ -16,7 +16,7 @@ import { MobileNav } from "../components/MobileNav";
 const getApolloSandboxUrl = () => {
   const graphqlEndpoint = import.meta.env.PROD
     ? "https://ncf-demo.thomashundley.com/api/graphql"
-    : "http://localhost:4000";
+    : "http://localhost:5051";
   return `https://studio.apollographql.com/sandbox/explorer?endpoint=${encodeURIComponent(graphqlEndpoint)}`;
 };
 
@@ -175,18 +175,18 @@ export function LandingPage() {
 
           {/* Main Headline - NCF Grant Management */}
           <h1
-            className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold tracking-tight mb-4 leading-tight text-white animate-fade-in-up"
+            className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold tracking-tight mb-4 leading-tight text-slate-900 dark:text-white animate-fade-in-up"
             style={{ animationDelay: "0.1s" }}
           >
-            <span className="text-cyber-gold-400">NCF</span> Grant Management
+            <span className="text-cyber-gold-500 dark:text-cyber-gold-400">NCF</span> Grant Management
           </h1>
 
           <p
-            className="text-xl md:text-2xl text-slate-300 font-light mb-8 animate-fade-in-up"
+            className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 font-light mb-8 animate-fade-in-up"
             style={{ animationDelay: "0.15s" }}
           >
             A full-stack application demo for{" "}
-            <span className="text-white font-medium">National Christian Foundation</span>
+            <span className="text-slate-900 dark:text-white font-medium">National Christian Foundation</span>
           </p>
 
           {/* Tech Stack Pills */}
@@ -197,7 +197,7 @@ export function LandingPage() {
             {["GraphQL", "React", "TypeScript", "Node.js", "Tailwind CSS", "PostgreSQL"].map((tech) => (
               <span
                 key={tech}
-                className="px-3 py-1.5 bg-slate-800/60 border border-slate-700 rounded-lg text-slate-300 text-sm font-mono"
+                className="px-3 py-1.5 bg-slate-200/60 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-300 text-sm font-mono"
               >
                 {tech}
               </span>
@@ -209,14 +209,14 @@ export function LandingPage() {
             className="mb-12 animate-fade-in-up"
             style={{ animationDelay: "0.25s" }}
           >
-            <p className="text-slate-500 text-sm uppercase tracking-widest mb-2">Built with</p>
-            <p className="text-2xl md:text-3xl font-serif text-white">
-              AI <span className="text-cyber-gold-400">Orchestration</span>
+            <p className="text-slate-400 dark:text-slate-500 text-sm uppercase tracking-widest mb-2">Built with</p>
+            <p className="text-2xl md:text-3xl font-serif text-slate-900 dark:text-white">
+              AI <span className="text-cyber-gold-500 dark:text-cyber-gold-400">Orchestration</span>
             </p>
-            <p className="max-w-xl mx-auto text-slate-400 text-sm mt-3">
+            <p className="max-w-xl mx-auto text-slate-500 dark:text-slate-400 text-sm mt-3">
               As an AI orchestrator, I don't need to know GraphQL to build with it.
               <br />
-              <span className="text-slate-300">Here's a working demo and source code to illustrate the point.</span>
+              <span className="text-slate-700 dark:text-slate-300">Here's a working demo and source code to illustrate the point.</span>
             </p>
           </div>
 
@@ -264,7 +264,7 @@ export function LandingPage() {
                 <SignArrow
                   direction="right"
                   label="Live Demo"
-                  href="/demo"
+                  href="/grants-landing"
                   color="blue"
                   animated
                 />

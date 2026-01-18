@@ -14,6 +14,7 @@ import { Routes, Route } from 'react-router-dom';
 import { LandingPage } from './pages/LandingPage';
 import { StoryPage } from './pages/StoryPage';
 import { TechStackPage } from './pages/TechStackPage';
+import { GrantLandingPage } from './pages/GrantLandingPage';
 import { Dashboard } from './pages/Dashboard';
 import { MinistriesPage } from './pages/MinistriesPage';
 import { GrantsPage } from './pages/GrantsPage';
@@ -33,6 +34,7 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/story" element={<StoryPage />} />
         <Route path="/tech" element={<TechStackPage />} />
+        <Route path="/grants-landing" element={<GrantLandingPage />} />
 
         {/* Demo pages (with nav header via DemoLayout) */}
         <Route element={<DemoLayout />}>

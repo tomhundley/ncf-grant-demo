@@ -83,10 +83,10 @@ export function DonorsPage() {
       {/* Page Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-serif font-bold text-white mb-1">
+          <h1 className="text-3xl font-serif font-bold text-slate-900 dark:text-white mb-1">
             Donors
           </h1>
-          <p className="text-slate-400 text-sm">
+          <p className="text-slate-600 dark:text-slate-400 text-sm">
             View donors and manage giving funds.
           </p>
         </div>
@@ -116,13 +116,13 @@ export function DonorsPage() {
                   {/* Donor Header */}
                   <div className="flex flex-col md:flex-row justify-between items-start mb-8 gap-4">
                     <div>
-                      <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                      <h2 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
                         {donor.firstName} {donor.lastName}
-                        <span className="inline-block px-2 py-0.5 rounded text-xs bg-electric-blue-500/20 text-electric-blue-400 font-normal">
+                        <span className="inline-block px-2 py-0.5 rounded text-xs bg-electric-blue-500/20 text-electric-blue-600 dark:text-electric-blue-400 font-normal">
                           Donor
                         </span>
                       </h2>
-                      <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-2 text-sm text-slate-400">
+                      <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-2 text-sm text-slate-600 dark:text-slate-400">
                         <span className="flex items-center">
                           <svg
                             className="w-4 h-4 mr-2 opacity-70"
@@ -159,11 +159,11 @@ export function DonorsPage() {
                         )}
                       </div>
                     </div>
-                    <div className="text-left md:text-right bg-midnight-900/50 p-3 rounded-xl border border-white/5 min-w-[180px]">
+                    <div className="text-left md:text-right bg-slate-100/50 dark:bg-midnight-900/50 p-3 rounded-xl border border-black/5 dark:border-white/5 min-w-[180px]">
                       <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">
                         Total Contributions
                       </p>
-                      <p className="text-3xl font-serif font-bold text-neon-green-400 text-glow-green">
+                      <p className="text-3xl font-serif font-bold text-neon-green-600 dark:text-neon-green-400 dark:text-glow-green">
                         {formatCurrency(donor.totalBalance)}
                       </p>
                     </div>
@@ -171,22 +171,22 @@ export function DonorsPage() {
 
                   {/* Giving Funds */}
                   <div>
-                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-white/5 pb-2">
+                    <h3 className="text-sm font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4 border-b border-black/5 dark:border-white/5 pb-2">
                       Giving Funds
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {donor.givingFunds.map((fund) => (
                         <div
                           key={fund.id}
-                          className="bg-midnight-900/80 border border-white/10 rounded-xl p-5 hover:border-electric-blue-500/50 transition-colors group"
+                          className="bg-slate-100/80 dark:bg-midnight-900/80 border border-black/10 dark:border-white/10 rounded-xl p-5 hover:border-electric-blue-500/50 transition-colors group"
                         >
                           <div className="flex justify-between items-start">
                             <div>
-                              <h4 className="font-bold text-white text-lg group-hover:text-electric-blue-300 transition-colors">
+                              <h4 className="font-bold text-slate-900 dark:text-white text-lg group-hover:text-electric-blue-600 dark:group-hover:text-electric-blue-300 transition-colors">
                                 {fund.name}
                               </h4>
                               {fund.description && (
-                                <p className="text-sm text-slate-400 mt-1 line-clamp-1">
+                                <p className="text-sm text-slate-600 dark:text-slate-400 mt-1 line-clamp-1">
                                   {fund.description}
                                 </p>
                               )}
@@ -207,13 +207,13 @@ export function DonorsPage() {
                               <p className="text-xs text-slate-500 uppercase mb-0.5">
                                 Current Balance
                               </p>
-                              <p className="text-2xl font-bold text-white">
+                              <p className="text-2xl font-bold text-slate-900 dark:text-white">
                                 {formatCurrency(fund.balance)}
                               </p>
                             </div>
                             <button
                               onClick={() => setSelectedFund(fund)}
-                              className="btn-outline text-xs px-3 py-1.5 border-white/20 hover:bg-electric-blue-600 hover:border-electric-blue-600 hover:text-white text-slate-300"
+                              className="btn-outline text-xs px-3 py-1.5 border-black/20 dark:border-white/20 hover:bg-electric-blue-600 hover:border-electric-blue-600 hover:text-white text-slate-600 dark:text-slate-300"
                             >
                               Add Funds
                             </button>
@@ -230,33 +230,33 @@ export function DonorsPage() {
           {viewMode === 'list' && (
             <div className="hidden md:block glass-panel overflow-hidden p-0">
               <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-white/10">
-                  <thead className="bg-midnight-900/50">
+                <table className="min-w-full divide-y divide-black/10 dark:divide-white/10">
+                  <thead className="bg-slate-100/50 dark:bg-midnight-900/50">
                     <tr>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                         Donor
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                         Contact
                       </th>
-                      <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                         Giving Funds
                       </th>
-                      <th className="px-6 py-4 text-right text-xs font-medium text-slate-400 uppercase tracking-wider">
+                      <th className="px-6 py-4 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                         Total Balance
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-white/10">
+                  <tbody className="divide-y divide-black/10 dark:divide-white/10">
                     {donors.map((donor) => (
-                      <tr key={donor.id} className="hover:bg-white/5 transition-colors">
+                      <tr key={donor.id} className="hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
                         <td className="px-6 py-4">
-                          <div className="font-bold text-white">
+                          <div className="font-bold text-slate-900 dark:text-white">
                             {donor.firstName} {donor.lastName}
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <div className="text-sm text-slate-400">
+                          <div className="text-sm text-slate-600 dark:text-slate-400">
                             <div>{donor.email}</div>
                             {donor.phone && (
                               <div className="text-slate-500">{donor.phone}</div>
@@ -271,12 +271,12 @@ export function DonorsPage() {
                                 onClick={() => setSelectedFund(fund)}
                                 className={`inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium border transition-colors hover:border-electric-blue-500/50 ${
                                   fund.active
-                                    ? "bg-midnight-800 border-white/10 text-white"
-                                    : "bg-slate-800/50 border-slate-700 text-slate-500"
+                                    ? "bg-slate-100 dark:bg-midnight-800 border-black/10 dark:border-white/10 text-slate-900 dark:text-white"
+                                    : "bg-slate-200/50 dark:bg-slate-800/50 border-slate-300 dark:border-slate-700 text-slate-500"
                                 }`}
                               >
                                 <span className="truncate max-w-[100px]">{fund.name}</span>
-                                <span className="ml-2 text-electric-blue-400 font-bold">
+                                <span className="ml-2 text-electric-blue-600 dark:text-electric-blue-400 font-bold">
                                   {formatCurrency(fund.balance)}
                                 </span>
                               </button>
@@ -284,7 +284,7 @@ export function DonorsPage() {
                           </div>
                         </td>
                         <td className="px-6 py-4 text-right">
-                          <span className="text-lg font-bold text-neon-green-400 font-serif">
+                          <span className="text-lg font-bold text-neon-green-600 dark:text-neon-green-400 font-serif">
                             {formatCurrency(donor.totalBalance)}
                           </span>
                         </td>
@@ -303,7 +303,7 @@ export function DonorsPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           {/* Backdrop */}
           <div
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/50 dark:bg-black/80 backdrop-blur-sm"
             onClick={() => {
               setSelectedFund(null);
               setAddAmount("");
@@ -311,27 +311,27 @@ export function DonorsPage() {
           ></div>
 
           {/* Modal Content */}
-          <div className="relative z-10 w-full max-w-md bg-midnight-900 border border-white/20 rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up">
+          <div className="relative z-10 w-full max-w-md bg-white dark:bg-midnight-900 border border-black/10 dark:border-white/20 rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up">
             <div className="p-6">
-              <h2 className="text-xl font-bold text-white mb-2">Add Funds</h2>
-              <p className="text-slate-400 mb-6">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">Add Funds</h2>
+              <p className="text-slate-600 dark:text-slate-400 mb-6">
                 Adding to{" "}
-                <span className="text-electric-blue-400 font-bold">
+                <span className="text-electric-blue-600 dark:text-electric-blue-400 font-bold">
                   {selectedFund.name}
                 </span>
               </p>
 
-              <div className="bg-midnight-800 rounded-lg p-4 mb-6 border border-white/5">
+              <div className="bg-slate-100 dark:bg-midnight-800 rounded-lg p-4 mb-6 border border-black/5 dark:border-white/5">
                 <p className="text-xs text-slate-500 uppercase mb-1">
                   Current Balance
                 </p>
-                <p className="text-2xl font-serif font-bold text-white">
+                <p className="text-2xl font-serif font-bold text-slate-900 dark:text-white">
                   {formatCurrency(selectedFund.balance)}
                 </p>
               </div>
 
               <div className="mb-6">
-                <label className="block text-sm font-medium text-slate-300 mb-2">
+                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   Amount to Add
                 </label>
                 <div className="relative">
@@ -345,7 +345,7 @@ export function DonorsPage() {
                     placeholder="0.00"
                     min="0"
                     step="0.01"
-                    className="input-premium bg-midnight-950 border-white/20 pl-8 text-xl w-full"
+                    className="input-premium pl-8 text-xl w-full"
                     autoFocus
                   />
                 </div>
@@ -357,7 +357,7 @@ export function DonorsPage() {
                     setSelectedFund(null);
                     setAddAmount("");
                   }}
-                  className="btn-outline text-sm border-white/10 text-slate-400 hover:text-white"
+                  className="btn-outline text-sm"
                 >
                   Cancel
                 </button>
