@@ -19,10 +19,9 @@ export function RootLayout() {
           loop
           muted
           playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-20"
-          poster="/ai-robots-bg.png"
+          className="absolute inset-0 w-full h-full object-cover opacity-30"
         >
-          <source src="/ai-robots-bg.mp4" type="video/mp4" />
+          <source src="/ncf-bg.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-gradient-to-t from-midnight-950 via-midnight-950/90 to-midnight-950/70" />
       </div>
