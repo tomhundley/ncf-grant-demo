@@ -9,6 +9,7 @@
 
 import { Link } from "react-router-dom";
 import { MobileNav } from "../components/MobileNav";
+import { ThemeToggle } from "../components/ThemeToggle";
 
 /**
  * Get the Apollo Sandbox URL based on environment
@@ -159,6 +160,11 @@ function SignArrow({
 export function LandingPage() {
   return (
     <div className="min-h-screen flex flex-col overflow-hidden relative">
+      {/* Theme Toggle - Prominent fixed position top right */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle showLabel />
+      </div>
+
       {/* Tailwind safelist - hidden element to prevent class purging */}
       <div className="hidden from-purple-600 to-purple-500 from-purple-500 to-purple-400 text-purple-600 group-hover:text-purple-500 from-neon-green-600 to-neon-green-500 from-neon-green-500 to-neon-green-400 text-neon-green-600 group-hover:text-neon-green-500" />
 
