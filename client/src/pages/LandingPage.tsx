@@ -224,6 +224,18 @@ export function LandingPage() {
               <br />
               <span className="text-slate-700 dark:text-slate-300">Here's a working demo and source code to illustrate the point.</span>
             </p>
+            <p className="max-w-xl mx-auto text-slate-500 dark:text-slate-400 text-sm mt-4">
+              Built by{" "}
+              <a
+                href="https://www.thomashundley.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-cyber-gold-500 dark:text-cyber-gold-400 hover:text-cyber-gold-600 dark:hover:text-cyber-gold-300 font-medium transition-colors"
+              >
+                Tom Hundley
+              </a>
+              {" "}— who has zero GraphQL experience.
+            </p>
           </div>
 
           {/* Street Sign Post */}
