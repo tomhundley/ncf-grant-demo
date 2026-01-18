@@ -1,0 +1,141 @@
+# =============================================================================
+# SpectaQL Configuration
+# =============================================================================
+# Generates static HTML documentation from the GraphQL schema.
+#
+# Usage:
+#   npm run docs:generate    # Generate docs (requires server running)
+#   npm run docs:serve       # Serve docs locally
+#
+# The server must be running at http://localhost:4000 for introspection.
+# =============================================================================
+
+spectaql:
+  # Output directory for generated documentation
+  targetDir: ./docs/api
+
+  # Logo for the documentation site
+  # logoFile: ./docs/assets/logo.png
+
+  # Favicon
+  # faviconFile: ./docs/assets/favicon.png
+
+  # Display options
+  displayAllServers: true
+
+introspection:
+  # Use exported schema file (no server required)
+  schemaFile: ./docs/schema/schema.graphql
+
+  # Alternative: Use URL to introspect running server
+  # url: http://localhost:4000
+  # headers:
+  #   Authorization: Bearer <token>
+
+  # Query depth limit for introspection
+  queryDepthLimit: 10
+
+info:
+  # API title displayed in the documentation
+  title: Ministry Grant Tracker API
+
+  # API description (supports markdown)
+  description: |
+    GraphQL API for managing donor-advised funds and ministry grants.
+
+    ## Overview
+
+    This API provides endpoints for:
+    - **Ministries** - Manage charitable organizations that receive grants
+    - **Donors** - Manage individuals who establish giving funds
+    - **Giving Funds** - Donor-advised fund accounts holding charitable assets
+    - **Grants** - Financial distributions from funds to ministries
+
+    ## Grant Workflow
+
+    Grants follow a defined lifecycle:
+    ```
+    PENDING → APPROVED → FUNDED
+           ↘ REJECTED
+    ```
+
+    ## Authentication
+
+    This demo API does not require authentication. In production, implement
+    JWT or OAuth authentication.
+
+    ## Base URL
+
+    - **Development:** `http://localhost:4000`
+    - **Production:** `https://ncf-demo.thomashundley.com/api/graphql`
+
+  # Version (optional)
+  version: 1.0.0
+
+  # Contact information
+  contact:
+    name: Tom Hundley
+    url: https://thomashundley.com
+    email: tom@thomashundley.com
+
+  # License
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+  # Terms of service URL
+  # termsOfService: https://example.com/terms
+
+servers:
+  - url: http://localhost:4000
+    description: Development Server
+    production: false
+
+  - url: https://ncf-demo.thomashundley.com/api/graphql
+    description: Production Server
+    production: true
+
+# Extensions for additional customization
+extensions:
+  # Hide certain types or fields
+  # hideTypes:
+  #   - InternalType
+
+  # Group operations by tags
+  # tags:
+  #   - name: Ministries
+  #     description: Ministry management operations
+
+  # Example values for types
+  examples:
+    Ministry:
+      name: "Compassion International"
+      ein: "36-2423707"
+      category: HUMANITARIAN
+      city: "Colorado Springs"
+      state: "CO"
+      verified: true
+
+    Donor:
+      firstName: "John"
+      lastName: "Smith"
+      email: "john.smith@example.com"
+      phone: "(555) 123-4567"
+
+    GivingFund:
+      name: "Smith Family Foundation"
+      description: "Supporting Christian education and missions"
+      balance: "50000.00"
+
+    Grant:
+      amount: "5000.00"
+      status: PENDING
+      purpose: "Support for summer youth camp program"
+
+    DashboardStats:
+      totalMinistries: 45
+      verifiedMinistries: 38
+      totalDonors: 120
+      totalFunds: 185
+      totalBalance: "2500000.00"
+      totalDisbursed: "850000.00"

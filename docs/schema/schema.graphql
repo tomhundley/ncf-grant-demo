@@ -1,0 +1,577 @@
+# ==========================================================================
+  # CUSTOM SCALARS
+  # ==========================================================================
+
+  """
+  ISO 8601 date-time string
+  """
+  scalar DateTime
+
+  """
+  Decimal number with precision for financial amounts
+  """
+  scalar Decimal
+
+  # ==========================================================================
+  # ENUMS
+  # ==========================================================================
+
+  """
+  Categories for classifying ministries by their primary mission focus.
+  Used for filtering and reporting purposes.
+  """
+  enum MinistryCategory {
+    "Local churches and congregations"
+    CHURCH
+    "Domestic and international mission organizations"
+    MISSIONS
+    "Christian schools, universities, seminaries"
+    EDUCATION
+    "Disaster relief, poverty alleviation, food banks"
+    HUMANITARIAN
+    "Youth ministry, camps, and mentorship programs"
+    YOUTH
+    "Christian broadcasting, publishing, and digital media"
+    MEDIA
+    "Medical missions, hospitals, and healthcare outreach"
+    HEALTHCARE
+    "Pro-life, religious liberty, and advocacy organizations"
+    ADVOCACY
+    "Miscellaneous ministries not fitting other categories"
+    OTHER
+  }
+
+  """
+  Grant status representing the lifecycle of a grant request.
+  Grants flow: PENDING → APPROVED → FUNDED (or REJECTED at any point)
+  """
+  enum GrantStatus {
+    "Grant request submitted, awaiting review"
+    PENDING
+    "Grant approved by fund advisor, awaiting disbursement"
+    APPROVED
+    "Grant funds have been distributed to the ministry"
+    FUNDED
+    "Grant request was declined"
+    REJECTED
+  }
+
+  # ==========================================================================
+  # MINISTRY TYPE
+  # ==========================================================================
+
+  """
+  A ministry, church, or charitable organization that can receive grants.
+  Ministries must be verified before they can receive grant disbursements.
+  """
+  type Ministry {
+    "Unique identifier"
+    id: Int!
+    "Organization name"
+    name: String!
+    "IRS Employer Identification Number (EIN) for verification"
+    ein: String
+    "Primary ministry category"
+    category: MinistryCategory!
+    "Detailed description of the organization"
+    description: String
+    "Mission statement"
+    mission: String
+    "Organization website URL"
+    website: String
+    "City where headquartered"
+    city: String
+    "State or province"
+    state: String
+    "Country (defaults to USA)"
+    country: String!
+    "Whether the ministry has been verified for grant eligibility"
+    verified: Boolean!
+    "Whether the ministry is currently accepting grants"
+    active: Boolean!
+    "When the ministry record was created"
+    createdAt: DateTime!
+    "When the ministry record was last updated"
+    updatedAt: DateTime!
+
+    # Computed/Related fields
+    "All grants received by this ministry"
+    grants: [Grant!]!
+    "Total amount of funded grants"
+    totalFunded: Decimal!
+    "Count of grants by status"
+    grantCounts: GrantCounts!
+  }
+
+  """
+  Aggregated grant counts for a ministry or fund
+  """
+  type GrantCounts {
+    pending: Int!
+    approved: Int!
+    funded: Int!
+    rejected: Int!
+    total: Int!
+  }
+
+  # ==========================================================================
+  # DONOR TYPE
+  # ==========================================================================
+
+  """
+  A donor who has established one or more giving funds.
+  Donors recommend grants from their funds to verified ministries.
+  """
+  type Donor {
+    "Unique identifier"
+    id: Int!
+    "Donor's first name"
+    firstName: String!
+    "Donor's last name"
+    lastName: String!
+    "Full name (computed)"
+    fullName: String!
+    "Email address (unique)"
+    email: String!
+    "Phone number"
+    phone: String
+    "When the donor record was created"
+    createdAt: DateTime!
+    "When the donor record was last updated"
+    updatedAt: DateTime!
+
+    # Related fields
+    "All giving funds owned by this donor"
+    givingFunds: [GivingFund!]!
+    "Total balance across all giving funds"
+    totalBalance: Decimal!
+  }
+
+  # ==========================================================================
+  # GIVING FUND TYPE
+  # ==========================================================================
+
+  """
+  A donor-advised fund that holds charitable assets.
+  Donors recommend grants from their fund to verified ministries.
+  """
+  type GivingFund {
+    "Unique identifier"
+    id: Int!
+    "Fund name (e.g., 'Smith Family Giving Fund')"
+    name: String!
+    "Optional description of the fund's purpose"
+    description: String
+    "Current fund balance available for grants"
+    balance: Decimal!
+    "Whether the fund is active"
+    active: Boolean!
+    "When the fund was created"
+    createdAt: DateTime!
+    "When the fund was last updated"
+    updatedAt: DateTime!
+
+    # Related fields
+    "The donor who owns this fund"
+    donor: Donor!
+    "Donor ID (for direct reference)"
+    donorId: Int!
+    "All grants made from this fund"
+    grants: [Grant!]!
+    "Total amount disbursed from this fund"
+    totalDisbursed: Decimal!
+    "Grant counts by status"
+    grantCounts: GrantCounts!
+  }
+
+  # ==========================================================================
+  # GRANT TYPE
+  # ==========================================================================
+
+  """
+  A grant from a giving fund to a ministry.
+  Represents the core transaction in the donor-advised fund system.
+  """
+  type Grant {
+    "Unique identifier"
+    id: Int!
+    "Grant amount in USD"
+    amount: Decimal!
+    "Current status of the grant"
+    status: GrantStatus!
+    "Description of the grant purpose"
+    purpose: String
+    "Internal notes from the fund advisor"
+    notes: String
+
+    # Timestamps
+    "When the grant was requested"
+    requestedAt: DateTime!
+    "When the grant was approved (if approved)"
+    approvedAt: DateTime
+    "When the grant was funded/disbursed (if funded)"
+    fundedAt: DateTime
+    "When the grant was rejected (if rejected)"
+    rejectedAt: DateTime
+    "When the grant record was last updated"
+    updatedAt: DateTime!
+
+    # Related fields
+    "The giving fund this grant is from"
+    givingFund: GivingFund!
+    "Giving fund ID"
+    givingFundId: Int!
+    "The ministry receiving the grant"
+    ministry: Ministry!
+    "Ministry ID"
+    ministryId: Int!
+  }
+
+  # ==========================================================================
+  # PAGINATION TYPES
+  # ==========================================================================
+
+  """
+  Page information for paginated queries
+  """
+  type PageInfo {
+    "Whether there are more items after this page"
+    hasNextPage: Boolean!
+    "Whether there are more items before this page"
+    hasPreviousPage: Boolean!
+    "Cursor for the first item in the page"
+    startCursor: String
+    "Cursor for the last item in the page"
+    endCursor: String
+    "Total count of all items (across all pages)"
+    totalCount: Int!
+  }
+
+  """
+  A single ministry in a paginated list
+  """
+  type MinistryEdge {
+    "The ministry"
+    node: Ministry!
+    "Cursor for this item"
+    cursor: String!
+  }
+
+  """
+  Paginated list of ministries using Relay-style connections
+  """
+  type MinistryConnection {
+    "List of ministry edges"
+    edges: [MinistryEdge!]!
+    "Pagination information"
+    pageInfo: PageInfo!
+  }
+
+  # ==========================================================================
+  # DASHBOARD STATISTICS
+  # ==========================================================================
+
+  """
+  Aggregated statistics for the dashboard overview
+  """
+  type DashboardStats {
+    "Total number of ministries"
+    totalMinistries: Int!
+    "Number of verified ministries"
+    verifiedMinistries: Int!
+    "Total number of donors"
+    totalDonors: Int!
+    "Total number of giving funds"
+    totalFunds: Int!
+    "Total balance across all funds"
+    totalBalance: Decimal!
+    "Total amount disbursed in funded grants"
+    totalDisbursed: Decimal!
+    "Total pending grant amount"
+    pendingAmount: Decimal!
+    "Grant counts by status"
+    grantsByStatus: GrantCounts!
+  }
+
+  # ==========================================================================
+  # INPUT TYPES
+  # ==========================================================================
+
+  """
+  Input for filtering ministry queries
+  """
+  input MinistryFilter {
+    "Filter by category"
+    category: MinistryCategory
+    "Filter by verification status"
+    verified: Boolean
+    "Filter by active status"
+    active: Boolean
+    "Search by name (case-insensitive, partial match)"
+    search: String
+    "Filter by state"
+    state: String
+  }
+
+  """
+  Input for creating a new ministry
+  """
+  input CreateMinistryInput {
+    "Organization name (required)"
+    name: String!
+    "IRS Employer Identification Number"
+    ein: String
+    "Ministry category (required)"
+    category: MinistryCategory!
+    "Detailed description"
+    description: String
+    "Mission statement"
+    mission: String
+    "Website URL"
+    website: String
+    "City"
+    city: String
+    "State or province"
+    state: String
+    "Country (defaults to USA)"
+    country: String
+  }
+
+  """
+  Input for updating a ministry
+  """
+  input UpdateMinistryInput {
+    "Organization name"
+    name: String
+    "IRS Employer Identification Number"
+    ein: String
+    "Ministry category"
+    category: MinistryCategory
+    "Detailed description"
+    description: String
+    "Mission statement"
+    mission: String
+    "Website URL"
+    website: String
+    "City"
+    city: String
+    "State or province"
+    state: String
+    "Country"
+    country: String
+    "Verification status (admin only)"
+    verified: Boolean
+    "Active status"
+    active: Boolean
+  }
+
+  """
+  Input for creating a new donor
+  """
+  input CreateDonorInput {
+    "First name (required)"
+    firstName: String!
+    "Last name (required)"
+    lastName: String!
+    "Email address (required, must be unique)"
+    email: String!
+    "Phone number"
+    phone: String
+  }
+
+  """
+  Input for creating a new giving fund
+  """
+  input CreateGivingFundInput {
+    "Fund name (required)"
+    name: String!
+    "Optional description"
+    description: String
+    "Initial fund balance (defaults to 0)"
+    initialBalance: Decimal
+    "Donor ID who owns this fund (required)"
+    donorId: Int!
+  }
+
+  """
+  Input for creating a grant request
+  """
+  input CreateGrantInput {
+    "Grant amount in USD (required)"
+    amount: Decimal!
+    "Description of grant purpose"
+    purpose: String
+    "ID of the giving fund (required)"
+    givingFundId: Int!
+    "ID of the recipient ministry (required)"
+    ministryId: Int!
+  }
+
+  # ==========================================================================
+  # QUERIES
+  # ==========================================================================
+
+  type Query {
+    # Ministry queries
+    """
+    Get a single ministry by ID
+    """
+    ministry(id: Int!): Ministry
+
+    """
+    Get all ministries with optional filtering and pagination.
+    Uses Relay-style cursor pagination for efficient large dataset handling.
+    """
+    ministries(
+      "Filter criteria"
+      filter: MinistryFilter
+      "Number of items per page (default: 20, max: 100)"
+      first: Int
+      "Cursor to start after (for forward pagination)"
+      after: String
+    ): MinistryConnection!
+
+    # Donor queries
+    """
+    Get a single donor by ID
+    """
+    donor(id: Int!): Donor
+
+    """
+    Get all donors
+    """
+    donors: [Donor!]!
+
+    # Giving Fund queries
+    """
+    Get a single giving fund by ID
+    """
+    givingFund(id: Int!): GivingFund
+
+    """
+    Get all giving funds, optionally filtered by donor
+    """
+    givingFunds(donorId: Int): [GivingFund!]!
+
+    # Grant queries
+    """
+    Get a single grant by ID
+    """
+    grant(id: Int!): Grant
+
+    """
+    Get grants with optional status and ministry filters
+    """
+    grants(
+      "Filter by grant status"
+      status: GrantStatus
+      "Filter by ministry ID"
+      ministryId: Int
+      "Filter by giving fund ID"
+      givingFundId: Int
+    ): [Grant!]!
+
+    # Dashboard
+    """
+    Get aggregated statistics for the dashboard
+    """
+    dashboardStats: DashboardStats!
+  }
+
+  # ==========================================================================
+  # MUTATIONS
+  # ==========================================================================
+
+  type Mutation {
+    # ========================================================================
+    # Ministry Mutations (CRUD)
+    # ========================================================================
+
+    """
+    Create a new ministry. New ministries are unverified by default.
+    """
+    createMinistry(input: CreateMinistryInput!): Ministry!
+
+    """
+    Update an existing ministry by ID.
+    Returns the updated ministry or null if not found.
+    """
+    updateMinistry(id: Int!, input: UpdateMinistryInput!): Ministry
+
+    """
+    Delete a ministry by ID.
+    Will fail if the ministry has associated grants (referential integrity).
+    """
+    deleteMinistry(id: Int!): Boolean!
+
+    """
+    Verify a ministry for grant eligibility.
+    """
+    verifyMinistry(id: Int!): Ministry
+
+    # ========================================================================
+    # Donor Mutations
+    # ========================================================================
+
+    """
+    Create a new donor.
+    """
+    createDonor(input: CreateDonorInput!): Donor!
+
+    # ========================================================================
+    # Giving Fund Mutations
+    # ========================================================================
+
+    """
+    Create a new giving fund for a donor.
+    """
+    createGivingFund(input: CreateGivingFundInput!): GivingFund!
+
+    """
+    Add funds to a giving fund (contribution).
+    Returns the updated fund with new balance.
+    """
+    addFunds(
+      "ID of the giving fund"
+      fundId: Int!
+      "Amount to add (must be positive)"
+      amount: Decimal!
+    ): GivingFund
+
+    # ========================================================================
+    # Grant Workflow Mutations
+    # ========================================================================
+
+    """
+    Create a new grant request.
+    The grant starts in PENDING status awaiting approval.
+    Does not affect fund balance until funded.
+    """
+    createGrantRequest(input: CreateGrantInput!): Grant!
+
+    """
+    Approve a pending grant request.
+    Changes status from PENDING to APPROVED.
+    Does not yet deduct from fund balance.
+    """
+    approveGrant(id: Int!): Grant
+
+    """
+    Reject a grant request with optional reason.
+    Changes status to REJECTED.
+    """
+    rejectGrant(
+      "ID of the grant to reject"
+      id: Int!
+      "Optional reason for rejection"
+      reason: String
+    ): Grant
+
+    """
+    Fund an approved grant (disburse to ministry).
+    Changes status from APPROVED to FUNDED.
+    Deducts the grant amount from the giving fund balance.
+    Will fail if fund has insufficient balance.
+    """
+    fundGrant(id: Int!): Grant
+  }

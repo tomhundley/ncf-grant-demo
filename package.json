@@ -40,6 +40,9 @@
     "typecheck": "npm run typecheck:server && npm run typecheck:client",
     "typecheck:server": "cd server && npm run typecheck",
     "typecheck:client": "cd client && npm run typecheck",
+    "docs:export-schema": "tsx scripts/export-schema.ts",
+    "docs:generate": "npm run docs:export-schema && spectaql spectaql.yml",
+    "docs:serve": "npm run docs:export-schema && spectaql spectaql.yml --development-mode --development-mode-port 4400",
     "postinstall": "prisma generate --schema=./server/prisma/schema.prisma",
     "vercel-build": "prisma generate --schema=./server/prisma/schema.prisma && cd client && npm run build"
   },
@@ -54,6 +57,8 @@
     "@types/node": "^20.0.0",
     "concurrently": "^8.2.2",
     "prisma": "^5.22.0",
+    "spectaql": "^3.0.6",
+    "tsx": "^4.21.0",
     "typescript": "^5.6.3"
   }
 }
