@@ -7,17 +7,18 @@
  * Used for Dashboard, Ministries, Grants, and Donors pages.
  */
 
-import { NavLink, Outlet, Link } from 'react-router-dom';
+import { NavLink, Outlet, Link } from "react-router-dom";
+import { MobileNav } from "../components/MobileNav";
 
 /**
  * Navigation items configuration
  */
 const navItems = [
-  { path: '/', label: 'Home', end: true },
-  { path: '/demo', label: 'Dashboard', end: true },
-  { path: '/ministries', label: 'Ministries', end: false },
-  { path: '/grants', label: 'Grants', end: false },
-  { path: '/donors', label: 'Donors', end: false },
+  { path: "/", label: "Home", end: true },
+  { path: "/demo", label: "Dashboard", end: true },
+  { path: "/ministries", label: "Ministries", end: false },
+  { path: "/grants", label: "Grants", end: false },
+  { path: "/donors", label: "Donors", end: false },
 ];
 
 /**
@@ -25,14 +26,17 @@ const navItems = [
  */
 export function DemoLayout() {
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen flex flex-col font-sans">
       {/* Navigation Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
+      <header className="bg-midnight-900/80 backdrop-blur-md border-b border-white/10 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo and Brand */}
-            <Link to="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-              <div className="w-10 h-10 bg-primary-600 rounded-lg flex items-center justify-center">
+            <Link
+              to="/"
+              className="flex items-center space-x-3 hover:opacity-80 transition-opacity"
+            >
+              <div className="w-10 h-10 bg-gradient-to-br from-electric-blue-500 to-electric-blue-700 rounded-lg shadow-lg shadow-electric-blue-500/20 flex items-center justify-center">
                 <svg
                   className="w-6 h-6 text-white"
                   fill="none"
@@ -48,25 +52,25 @@ export function DemoLayout() {
                 </svg>
               </div>
               <div>
-                <h1 className="text-lg font-semibold text-gray-900">
-                  NCF Grant Management
+                <h1 className="text-lg font-bold text-white tracking-wide">
+                  NCF Grant <span className="text-electric-blue-400">Demo</span>
                 </h1>
-                <p className="text-xs text-gray-500">Demo Application</p>
+                <p className="text-xs text-slate-400">Premium Console</p>
               </div>
             </Link>
 
-            {/* Navigation Links */}
-            <nav className="flex space-x-1">
+            {/* Navigation Links (Desktop) */}
+            <nav className="hidden md:flex space-x-1">
               {navItems.map((item) => (
                 <NavLink
                   key={item.path}
                   to={item.path}
                   end={item.end}
                   className={({ isActive }) =>
-                    `px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    `px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                       isActive
-                        ? 'bg-primary-50 text-primary-700'
-                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                        ? "bg-electric-blue-600/10 text-electric-blue-400 border border-electric-blue-600/20 shadow-glow-blue"
+                        : "text-slate-400 hover:text-white hover:bg-white/5"
                     }`
                   }
                 >
@@ -80,7 +84,7 @@ export function DemoLayout() {
               href="https://github.com/tomhundley/ncf-grant-demo"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-400 hover:text-gray-600 transition-colors"
+              className="text-slate-500 hover:text-white transition-colors"
               title="View on GitHub"
             >
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -96,23 +100,25 @@ export function DemoLayout() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full pb-24 md:pb-8">
         <Outlet />
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-gray-200 bg-white mt-auto">
+      <footer className="border-t border-white/10 bg-midnight-900/50 mt-auto hidden md:block">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex justify-between items-center">
-            <p className="text-sm text-gray-500">
-              NCF Grant Management Demo &mdash; Built with React, Apollo Client, and GraphQL
+            <p className="text-sm text-slate-500">
+              NCF Grant Management Demo &mdash; Built with React, Apollo Client,
+              and GraphQL
             </p>
-            <p className="text-sm text-gray-400">
-              By Tom Hundley
-            </p>
+            <p className="text-sm text-slate-600">By Tom Hundley</p>
           </div>
         </div>
       </footer>
+
+      {/* Mobile Navigation */}
+      <MobileNav />
     </div>
   );
 }

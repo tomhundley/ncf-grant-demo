@@ -164,14 +164,14 @@ export function GrantRequestForm({
   const isLoading = loadingMinistries || loadingDonors;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg">
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-midnight-900 rounded-xl shadow-2xl w-full max-w-lg border border-white/10">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900">
+        <div className="px-6 py-4 border-b border-white/10">
+          <h2 className="text-xl font-semibold text-white">
             New Grant Request
           </h2>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-slate-400">
             Create a grant request from a giving fund to a ministry
           </p>
         </div>
@@ -185,14 +185,14 @@ export function GrantRequestForm({
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
             {/* Ministry Selection */}
             <div>
-              <label className="label">
-                Ministry <span className="text-red-500">*</span>
+              <label className="block text-sm font-medium text-slate-300 mb-1">
+                Ministry <span className="text-red-400">*</span>
               </label>
               <select
                 name="ministryId"
                 value={formData.ministryId}
                 onChange={handleChange}
-                className={`input ${errors.ministryId ? 'border-red-500' : ''}`}
+                className={`input-premium w-full ${errors.ministryId ? 'border-red-500 focus:ring-red-500' : ''}`}
               >
                 <option value={0}>Select a ministry</option>
                 {ministries.map((ministry) => (
@@ -202,20 +202,20 @@ export function GrantRequestForm({
                 ))}
               </select>
               {errors.ministryId && (
-                <p className="mt-1 text-sm text-red-500">{errors.ministryId}</p>
+                <p className="mt-1 text-sm text-red-400">{errors.ministryId}</p>
               )}
             </div>
 
             {/* Donor Selection */}
             <div>
-              <label className="label">
-                Donor <span className="text-red-500">*</span>
+              <label className="block text-sm font-medium text-slate-300 mb-1">
+                Donor <span className="text-red-400">*</span>
               </label>
               <select
                 name="donorId"
                 value={formData.donorId}
                 onChange={handleChange}
-                className="input"
+                className="input-premium w-full"
               >
                 <option value={0}>Select a donor</option>
                 {donors.map((donor) => (
@@ -228,16 +228,16 @@ export function GrantRequestForm({
 
             {/* Giving Fund Selection */}
             <div>
-              <label className="label">
-                Giving Fund <span className="text-red-500">*</span>
+              <label className="block text-sm font-medium text-slate-300 mb-1">
+                Giving Fund <span className="text-red-400">*</span>
               </label>
               <select
                 name="givingFundId"
                 value={formData.givingFundId}
                 onChange={handleChange}
                 disabled={!formData.donorId}
-                className={`input ${errors.givingFundId ? 'border-red-500' : ''} ${
-                  !formData.donorId ? 'bg-gray-100' : ''
+                className={`input-premium w-full ${errors.givingFundId ? 'border-red-500 focus:ring-red-500' : ''} ${
+                  !formData.donorId ? 'opacity-50 cursor-not-allowed' : ''
                 }`}
               >
                 <option value={0}>
@@ -250,17 +250,17 @@ export function GrantRequestForm({
                 ))}
               </select>
               {errors.givingFundId && (
-                <p className="mt-1 text-sm text-red-500">{errors.givingFundId}</p>
+                <p className="mt-1 text-sm text-red-400">{errors.givingFundId}</p>
               )}
             </div>
 
             {/* Amount */}
             <div>
-              <label className="label">
-                Amount <span className="text-red-500">*</span>
+              <label className="block text-sm font-medium text-slate-300 mb-1">
+                Amount <span className="text-red-400">*</span>
               </label>
               <div className="relative">
-                <span className="absolute left-3 top-2 text-gray-500">$</span>
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">$</span>
                 <input
                   type="number"
                   name="amount"
@@ -269,14 +269,14 @@ export function GrantRequestForm({
                   placeholder="0.00"
                   min="0"
                   step="0.01"
-                  className={`input pl-8 ${errors.amount ? 'border-red-500' : ''}`}
+                  className={`input-premium w-full pl-8 ${errors.amount ? 'border-red-500 focus:ring-red-500' : ''}`}
                 />
               </div>
               {errors.amount && (
-                <p className="mt-1 text-sm text-red-500">{errors.amount}</p>
+                <p className="mt-1 text-sm text-red-400">{errors.amount}</p>
               )}
               {selectedFund && (
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-slate-400">
                   Available balance: {formatCurrency(selectedFund.balance)}
                 </p>
               )}
@@ -284,8 +284,8 @@ export function GrantRequestForm({
 
             {/* Purpose */}
             <div>
-              <label className="label">
-                Purpose <span className="text-red-500">*</span>
+              <label className="block text-sm font-medium text-slate-300 mb-1">
+                Purpose <span className="text-red-400">*</span>
               </label>
               <textarea
                 name="purpose"
@@ -293,21 +293,21 @@ export function GrantRequestForm({
                 onChange={handleChange}
                 rows={3}
                 placeholder="Describe the purpose of this grant..."
-                className={`input ${errors.purpose ? 'border-red-500' : ''}`}
+                className={`input-premium w-full ${errors.purpose ? 'border-red-500 focus:ring-red-500' : ''}`}
               />
               {errors.purpose && (
-                <p className="mt-1 text-sm text-red-500">{errors.purpose}</p>
+                <p className="mt-1 text-sm text-red-400">{errors.purpose}</p>
               )}
             </div>
           </form>
         )}
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-gray-200 flex justify-end space-x-3">
+        <div className="px-6 py-4 border-t border-white/10 flex justify-end space-x-3">
           <button
             type="button"
             onClick={onCancel}
-            className="btn-secondary"
+            className="btn-outline"
             disabled={loading}
           >
             Cancel

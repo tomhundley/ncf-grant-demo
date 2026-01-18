@@ -6,13 +6,257 @@
     <title>Ministry Grant Tracker API</title>
     <link rel="stylesheet" href="stylesheets/spectaql.min.css" />
     <script src="javascripts/spectaql.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+      /* NCF Dark Theme for SpectaQL */
+      :root {
+        --midnight-950: #020617;
+        --midnight-900: #0f172a;
+        --midnight-800: #1e293b;
+        --electric-blue-400: #60a5fa;
+        --electric-blue-500: #3b82f6;
+        --electric-blue-600: #2563eb;
+        --cyber-gold-400: #fbbf24;
+        --cyber-gold-500: #f59e0b;
+        --neon-green-400: #4ade80;
+        --neon-green-500: #22c55e;
+      }
+
+      /* Base */
+      body#spectaql {
+        background: var(--midnight-950) !important;
+        color: #e2e8f0 !important;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+      }
+
+      /* Sidebar */
+      #spectaql #sidebar {
+        background: var(--midnight-900) !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
+      }
+
+      #spectaql #sidebar .sidebar-top-container {
+        background: var(--midnight-900) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+      }
+
+      #spectaql #nav .nav-group-title {
+        color: var(--cyber-gold-400) !important;
+        font-family: 'Playfair Display', Georgia, serif !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        font-size: 11px !important;
+        letter-spacing: 0.1em !important;
+      }
+
+      #spectaql #nav .nav-group-section-title a,
+      #spectaql #nav a {
+        color: #94a3b8 !important;
+        transition: color 0.15s ease !important;
+      }
+
+      #spectaql #nav a:hover,
+      #spectaql #nav a.is-active {
+        color: var(--electric-blue-400) !important;
+      }
+
+      /* Main content */
+      #spectaql #docs {
+        background: var(--midnight-950) !important;
+      }
+
+      #spectaql #content {
+        background: var(--midnight-950) !important;
+      }
+
+      #spectaql .doc-heading {
+        color: white !important;
+        font-family: 'Playfair Display', Georgia, serif !important;
+        font-weight: 700 !important;
+      }
+
+      #spectaql h1, #spectaql h2, #spectaql h3, #spectaql h4, #spectaql h5 {
+        color: white !important;
+        font-family: 'Playfair Display', Georgia, serif !important;
+      }
+
+      #spectaql .doc-copy h2 {
+        color: var(--cyber-gold-400) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        padding-bottom: 8px !important;
+      }
+
+      #spectaql p, #spectaql li {
+        color: #cbd5e1 !important;
+      }
+
+      #spectaql a {
+        color: var(--electric-blue-400) !important;
+      }
+
+      #spectaql a:hover {
+        color: var(--electric-blue-500) !important;
+      }
+
+      /* Code blocks */
+      #spectaql pre, #spectaql code {
+        font-family: 'Fira Code', monospace !important;
+      }
+
+      #spectaql .doc-examples {
+        background: var(--midnight-800) !important;
+        border-left: 1px solid rgba(255, 255, 255, 0.1) !important;
+      }
+
+      #spectaql .example-section {
+        background: var(--midnight-900) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 8px !important;
+      }
+
+      #spectaql .example-section h5 {
+        background: linear-gradient(to right, var(--electric-blue-600), var(--electric-blue-500)) !important;
+        color: white !important;
+        font-family: 'Inter', sans-serif !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+        font-size: 11px !important;
+        letter-spacing: 0.05em !important;
+      }
+
+      #spectaql pre {
+        background: var(--midnight-950) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 6px !important;
+      }
+
+      #spectaql code {
+        color: var(--neon-green-400) !important;
+      }
+
+      #spectaql .hljs {
+        background: var(--midnight-950) !important;
+        color: #e2e8f0 !important;
+      }
+
+      #spectaql .hljs-attr, #spectaql .hljs-attribute {
+        color: var(--electric-blue-400) !important;
+      }
+
+      #spectaql .hljs-string {
+        color: var(--neon-green-400) !important;
+      }
+
+      #spectaql .hljs-number {
+        color: var(--cyber-gold-400) !important;
+      }
+
+      #spectaql .hljs-keyword, #spectaql .hljs-symbol {
+        color: #c084fc !important;
+      }
+
+      /* Tables */
+      #spectaql table {
+        background: var(--midnight-900) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+      }
+
+      #spectaql th {
+        background: var(--midnight-800) !important;
+        color: var(--cyber-gold-400) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+      }
+
+      #spectaql td {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+        color: #cbd5e1 !important;
+      }
+
+      #spectaql tr:hover td {
+        background: rgba(255, 255, 255, 0.02) !important;
+      }
+
+      /* Field definitions */
+      #spectaql .field-name {
+        color: var(--electric-blue-400) !important;
+        font-family: 'Fira Code', monospace !important;
+      }
+
+      #spectaql .field-type {
+        color: var(--neon-green-400) !important;
+        font-family: 'Fira Code', monospace !important;
+      }
+
+      #spectaql .field-arguments .field-argument-name {
+        color: var(--cyber-gold-400) !important;
+      }
+
+      /* Mobile navbar */
+      #spectaql #mobile-navbar {
+        background: var(--midnight-900) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+      }
+
+      #spectaql .hamburger,
+      #spectaql .hamburger::before,
+      #spectaql .hamburger::after {
+        background: white !important;
+      }
+
+      /* Close button */
+      #spectaql .close-button {
+        color: white !important;
+      }
+
+      /* Doc row borders */
+      #spectaql .doc-row {
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+      }
+
+      /* Operation titles */
+      #spectaql .operation-heading {
+        color: white !important;
+      }
+
+      #spectaql .group-heading {
+        color: var(--cyber-gold-400) !important;
+        font-family: 'Playfair Display', Georgia, serif !important;
+      }
+
+      /* Scrollbar */
+      #spectaql ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      #spectaql ::-webkit-scrollbar-track {
+        background: var(--midnight-900);
+      }
+
+      #spectaql ::-webkit-scrollbar-thumb {
+        background: var(--midnight-800);
+        border-radius: 4px;
+      }
+
+      #spectaql ::-webkit-scrollbar-thumb:hover {
+        background: #334155;
+      }
+
+      /* Selection */
+      #spectaql ::selection {
+        background: var(--cyber-gold-500);
+        color: var(--midnight-950);
+      }
+    </style>
   </head>
   <body id="spectaql">
     <div id="page" class="drawer-layout">
       <div id="sidebar">
         <div class="sidebar-top-container">
           <div id="logo">
-            <a href="/" style="display: inline-flex; align-items: center; padding: 8px 16px; margin: 8px; background: #4f46e5; color: white; text-decoration: none; border-radius: 8px; font-size: 14px; font-weight: 500;">
+            <a href="/" style="display: inline-flex; align-items: center; padding: 8px 16px; margin: 8px; background: #2563eb; color: white; text-decoration: none; border-radius: 8px; font-size: 14px; font-weight: 500; font-family: system-ui, -apple-system, sans-serif; transition: background 0.15s ease;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">
               <svg style="width: 16px; height: 16px; margin-right: 8px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
               </svg>
@@ -102,7 +346,7 @@
       </div>
       <div id="docs">
         <div id="mobile-navbar">
-          <a href="/" style="display: inline-flex; align-items: center; padding: 6px 12px; margin-right: 12px; background: #4f46e5; color: white; text-decoration: none; border-radius: 6px; font-size: 13px; font-weight: 500;">
+          <a href="/" style="display: inline-flex; align-items: center; padding: 6px 12px; margin-right: 12px; background: #2563eb; color: white; text-decoration: none; border-radius: 6px; font-size: 13px; font-weight: 500; font-family: system-ui, -apple-system, sans-serif; transition: background 0.15s ease;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">
             <svg style="width: 14px; height: 14px; margin-right: 6px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>

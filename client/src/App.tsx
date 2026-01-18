@@ -18,6 +18,7 @@ import { MinistriesPage } from './pages/MinistriesPage';
 import { GrantsPage } from './pages/GrantsPage';
 import { DonorsPage } from './pages/DonorsPage';
 import { DemoLayout } from './layouts/DemoLayout';
+import { RootLayout } from './layouts/RootLayout';
 
 /**
  * Main App component
@@ -25,16 +26,19 @@ import { DemoLayout } from './layouts/DemoLayout';
 export default function App() {
   return (
     <Routes>
-      {/* Standalone pages (no nav header) */}
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/story" element={<StoryPage />} />
+      {/* All routes wrapped in RootLayout for persistent background */}
+      <Route element={<RootLayout />}>
+        {/* Standalone pages (no nav header) */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/story" element={<StoryPage />} />
 
-      {/* Demo pages (with nav header via DemoLayout) */}
-      <Route element={<DemoLayout />}>
-        <Route path="/demo" element={<Dashboard />} />
-        <Route path="/ministries" element={<MinistriesPage />} />
-        <Route path="/grants" element={<GrantsPage />} />
-        <Route path="/donors" element={<DonorsPage />} />
+        {/* Demo pages (with nav header via DemoLayout) */}
+        <Route element={<DemoLayout />}>
+          <Route path="/demo" element={<Dashboard />} />
+          <Route path="/ministries" element={<MinistriesPage />} />
+          <Route path="/grants" element={<GrantsPage />} />
+          <Route path="/donors" element={<DonorsPage />} />
+        </Route>
       </Route>
     </Routes>
   );

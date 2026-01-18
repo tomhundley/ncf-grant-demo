@@ -1,23 +1,18 @@
 /**
  * =============================================================================
- * Donors Page
+ * Donors Page (Premium Edition)
  * =============================================================================
  *
  * Page for viewing donors and their giving funds.
- * Demonstrates:
- *   - Nested data fetching with GraphQL
- *   - Fund balance management
- *   - Add funds mutation
- *
- * @see https://www.apollographql.com/docs/react/data/queries/
+ * Refactored for the new premium dark aesthetic.
  */
 
-import { useState } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
-import { LIST_DONORS, GET_DASHBOARD_STATS } from '../graphql/queries';
-import { ADD_FUNDS } from '../graphql/mutations';
-import { LoadingSpinner } from '../components/LoadingSpinner';
-import { ErrorMessage } from '../components/ErrorMessage';
+import { useState } from "react";
+import { useQuery, useMutation } from "@apollo/client";
+import { LIST_DONORS, GET_DASHBOARD_STATS } from "../graphql/queries";
+import { ADD_FUNDS } from "../graphql/mutations";
+import { LoadingSpinner } from "../components/LoadingSpinner";
+import { ErrorMessage } from "../components/ErrorMessage";
 
 type GivingFund = {
   id: number;
@@ -43,7 +38,7 @@ type Donor = {
 export function DonorsPage() {
   // State for add funds modal
   const [selectedFund, setSelectedFund] = useState<GivingFund | null>(null);
-  const [addAmount, setAddAmount] = useState('');
+  const [addAmount, setAddAmount] = useState("");
 
   // Fetch donors with their giving funds
   const { data, loading, error } = useQuery(LIST_DONORS);
@@ -53,7 +48,7 @@ export function DonorsPage() {
     refetchQueries: [{ query: LIST_DONORS }, { query: GET_DASHBOARD_STATS }],
     onCompleted: () => {
       setSelectedFund(null);
-      setAddAmount('');
+      setAddAmount("");
     },
   });
 
@@ -70,9 +65,9 @@ export function DonorsPage() {
 
   // Format currency
   const formatCurrency = (value: string) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
       minimumFractionDigits: 0,
     }).format(parseFloat(value));
   };
@@ -80,12 +75,14 @@ export function DonorsPage() {
   const donors: Donor[] = data?.donors || [];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in-up">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Donors</h1>
-        <p className="mt-1 text-sm text-gray-500">
-          View donors and manage giving funds
+        <h1 className="text-3xl font-serif font-bold text-white mb-1">
+          Donors
+        </h1>
+        <p className="text-slate-400 text-sm">
+          View donors and manage giving funds.
         </p>
       </div>
 
@@ -97,27 +94,67 @@ export function DonorsPage() {
       ) : error ? (
         <ErrorMessage message="Failed to load donors" details={error.message} />
       ) : donors.length === 0 ? (
-        <div className="card text-center py-12">
-          <p className="text-gray-500">No donors found</p>
+        <div className="glass-panel text-center py-12">
+          <p className="text-slate-500 italic">No donors found.</p>
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-8">
           {donors.map((donor) => (
-            <div key={donor.id} className="card">
+            <div
+              key={donor.id}
+              className="glass-panel p-6 border-l-4 border-electric-blue-500"
+            >
               {/* Donor Header */}
-              <div className="flex justify-between items-start mb-6">
+              <div className="flex flex-col md:flex-row justify-between items-start mb-8 gap-4">
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-900">
+                  <h2 className="text-2xl font-bold text-white flex items-center gap-2">
                     {donor.firstName} {donor.lastName}
+                    <span className="inline-block px-2 py-0.5 rounded text-xs bg-electric-blue-500/20 text-electric-blue-400 font-normal">
+                      Donor
+                    </span>
                   </h2>
-                  <div className="flex items-center space-x-4 mt-1 text-sm text-gray-500">
-                    <span>{donor.email}</span>
-                    {donor.phone && <span>{donor.phone}</span>}
+                  <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mt-2 text-sm text-slate-400">
+                    <span className="flex items-center">
+                      <svg
+                        className="w-4 h-4 mr-2 opacity-70"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                        />
+                      </svg>
+                      {donor.email}
+                    </span>
+                    {donor.phone && (
+                      <span className="flex items-center">
+                        <svg
+                          className="w-4 h-4 mr-2 opacity-70"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                          />
+                        </svg>
+                        {donor.phone}
+                      </span>
+                    )}
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm text-gray-500">Total Contributions</p>
-                  <p className="text-2xl font-bold text-primary-600">
+                <div className="text-left md:text-right bg-midnight-900/50 p-3 rounded-xl border border-white/5 min-w-[180px]">
+                  <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">
+                    Total Contributions
+                  </p>
+                  <p className="text-3xl font-serif font-bold text-neon-green-400 text-glow-green">
                     {formatCurrency(donor.totalBalance)}
                   </p>
                 </div>
@@ -125,42 +162,49 @@ export function DonorsPage() {
 
               {/* Giving Funds */}
               <div>
-                <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-3">
+                <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-white/5 pb-2">
                   Giving Funds
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {donor.givingFunds.map((fund) => (
                     <div
                       key={fund.id}
-                      className="border border-gray-200 rounded-lg p-4 bg-gray-50"
+                      className="bg-midnight-900/80 border border-white/10 rounded-xl p-5 hover:border-electric-blue-500/50 transition-colors group"
                     >
                       <div className="flex justify-between items-start">
                         <div>
-                          <h4 className="font-medium text-gray-900">{fund.name}</h4>
+                          <h4 className="font-bold text-white text-lg group-hover:text-electric-blue-300 transition-colors">
+                            {fund.name}
+                          </h4>
                           {fund.description && (
-                            <p className="text-sm text-gray-500 mt-1">
+                            <p className="text-sm text-slate-400 mt-1 line-clamp-1">
                               {fund.description}
                             </p>
                           )}
                         </div>
                         <span
-                          className={`badge ${
-                            fund.active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                          className={`px-2 py-0.5 rounded text-xs font-semibold uppercase ${
+                            fund.active
+                              ? "bg-neon-green-500/10 text-neon-green-400 border border-neon-green-500/20"
+                              : "bg-slate-700/50 text-slate-400"
                           }`}
                         >
-                          {fund.active ? 'Active' : 'Inactive'}
+                          {fund.active ? "Active" : "Inactive"}
                         </span>
                       </div>
-                      <div className="mt-4 flex justify-between items-center">
+
+                      <div className="mt-6 flex justify-between items-end">
                         <div>
-                          <p className="text-sm text-gray-500">Balance</p>
-                          <p className="text-xl font-bold text-gray-900">
+                          <p className="text-xs text-slate-500 uppercase mb-0.5">
+                            Current Balance
+                          </p>
+                          <p className="text-2xl font-bold text-white">
                             {formatCurrency(fund.balance)}
                           </p>
                         </div>
                         <button
                           onClick={() => setSelectedFund(fund)}
-                          className="btn-primary text-sm"
+                          className="btn-outline text-xs px-3 py-1.5 border-white/20 hover:bg-electric-blue-600 hover:border-electric-blue-600 hover:text-white text-slate-300"
                         >
                           Add Funds
                         </button>
@@ -176,46 +220,75 @@ export function DonorsPage() {
 
       {/* Add Funds Modal */}
       {selectedFund && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
-              Add Funds to {selectedFund.name}
-            </h2>
-            <p className="text-sm text-gray-500 mb-4">
-              Current balance: {formatCurrency(selectedFund.balance)}
-            </p>
-            <div className="mb-4">
-              <label className="label">Amount to Add</label>
-              <div className="relative">
-                <span className="absolute left-3 top-2 text-gray-500">$</span>
-                <input
-                  type="number"
-                  value={addAmount}
-                  onChange={(e) => setAddAmount(e.target.value)}
-                  placeholder="0.00"
-                  min="0"
-                  step="0.01"
-                  className="input pl-8"
-                />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            onClick={() => {
+              setSelectedFund(null);
+              setAddAmount("");
+            }}
+          ></div>
+
+          {/* Modal Content */}
+          <div className="relative z-10 w-full max-w-md bg-midnight-900 border border-white/20 rounded-2xl shadow-2xl overflow-hidden animate-fade-in-up">
+            <div className="p-6">
+              <h2 className="text-xl font-bold text-white mb-2">Add Funds</h2>
+              <p className="text-slate-400 mb-6">
+                Adding to{" "}
+                <span className="text-electric-blue-400 font-bold">
+                  {selectedFund.name}
+                </span>
+              </p>
+
+              <div className="bg-midnight-800 rounded-lg p-4 mb-6 border border-white/5">
+                <p className="text-xs text-slate-500 uppercase mb-1">
+                  Current Balance
+                </p>
+                <p className="text-2xl font-serif font-bold text-white">
+                  {formatCurrency(selectedFund.balance)}
+                </p>
               </div>
-            </div>
-            <div className="flex justify-end space-x-3">
-              <button
-                onClick={() => {
-                  setSelectedFund(null);
-                  setAddAmount('');
-                }}
-                className="btn-secondary"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleAddFunds}
-                disabled={!addAmount || adding}
-                className="btn-primary"
-              >
-                {adding ? 'Adding...' : 'Add Funds'}
-              </button>
+
+              <div className="mb-6">
+                <label className="block text-sm font-medium text-slate-300 mb-2">
+                  Amount to Add
+                </label>
+                <div className="relative">
+                  <span className="absolute left-4 top-3 text-slate-500 text-lg">
+                    $
+                  </span>
+                  <input
+                    type="number"
+                    value={addAmount}
+                    onChange={(e) => setAddAmount(e.target.value)}
+                    placeholder="0.00"
+                    min="0"
+                    step="0.01"
+                    className="input-premium bg-midnight-950 border-white/20 pl-8 text-xl w-full"
+                    autoFocus
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end space-x-3">
+                <button
+                  onClick={() => {
+                    setSelectedFund(null);
+                    setAddAmount("");
+                  }}
+                  className="btn-outline text-sm border-white/10 text-slate-400 hover:text-white"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleAddFunds}
+                  disabled={!addAmount || adding}
+                  className="btn-primary flex-1 justify-center"
+                >
+                  {adding ? "Processing..." : "Confirm Transaction"}
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -3,272 +3,293 @@
  * Landing Page Component
  * =============================================================================
  *
- * Main entry point with 4 pathway cards for navigating the demo.
- * Provides access to Story, API Documentation, Demo, and GitHub.
+ * Landing page for the NCF Grant Management Demo.
+ * Demonstrates AI-assisted development capabilities.
  */
 
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import { MobileNav } from "../components/MobileNav";
 
 /**
  * Get the Apollo Sandbox URL based on environment
  */
 const getApolloSandboxUrl = () => {
   const graphqlEndpoint = import.meta.env.PROD
-    ? 'https://ncf-demo.thomashundley.com/api/graphql'
-    : 'http://localhost:4000';
+    ? "https://ncf-demo.thomashundley.com/api/graphql"
+    : "http://localhost:4000";
   return `https://studio.apollographql.com/sandbox/explorer?endpoint=${encodeURIComponent(graphqlEndpoint)}`;
 };
 
 /**
- * Pathway card data
+ * Street Sign Arrow Component
  */
-const pathways = [
-  {
-    title: 'Story',
-    description: 'Learn why we built this GraphQL API through our comic strip narrative',
-    to: '/story',
-    external: false,
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-        />
-      </svg>
-    ),
-  },
-  {
-    title: 'API Documentation',
-    description: 'Explore the GraphQL schema with SpectaQL docs and Apollo Sandbox',
-    to: '/docs/api/index.html',
-    secondaryLink: {
-      label: 'Apollo Sandbox',
-      getUrl: getApolloSandboxUrl,
-    },
-    external: false,
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
-        />
-      </svg>
-    ),
-  },
-  {
-    title: 'Demo',
-    description: 'Try the interactive grant management dashboard powered by GraphQL',
-    to: '/demo',
-    external: false,
-    icon: (
-      <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
-        />
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-    ),
-  },
-  {
-    title: 'GitHub',
-    description: 'View the source code, contribute, or fork for your own projects',
-    to: 'https://github.com/tomhundley/ncf-grant-demo',
-    external: true,
-    icon: (
-      <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-        <path
-          fillRule="evenodd"
-          clipRule="evenodd"
-          d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.341-3.369-1.341-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"
-        />
-      </svg>
-    ),
-  },
-];
-
 /**
- * Landing Page Component
+ * Tailwind class safelist (ensures these classes aren't purged):
+ * from-purple-600 to-purple-500 from-purple-500 to-purple-400
+ * text-purple-600 group-hover:text-purple-500
+ * from-neon-green-600 to-neon-green-500 from-neon-green-500 to-neon-green-400
+ * text-neon-green-600 group-hover:text-neon-green-500
  */
-export function LandingPage() {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col">
-      {/* Header */}
-      <header className="pt-12 pb-8 text-center">
-        <div className="flex justify-center mb-4">
-          <div className="w-16 h-16 bg-primary-600 rounded-2xl flex items-center justify-center shadow-lg">
-            <svg
-              className="w-10 h-10 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-          </div>
-        </div>
-        <h1 className="text-4xl font-bold text-gray-900 mb-3">
-          NCF Grant Management API
-        </h1>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto px-4">
-          A GraphQL API demo showcasing how to manage grants, ministries, donors, and giving funds
-        </p>
-      </header>
-
-      {/* Pathway Cards */}
-      <main className="flex-1 flex items-start justify-center px-4 pb-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl w-full">
-          {pathways.map((pathway) => (
-            <PathwayCard key={pathway.title} {...pathway} />
-          ))}
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="py-6 text-center text-sm text-gray-500">
-        <p>Built with React, Apollo Client, and GraphQL</p>
-      </footer>
-    </div>
-  );
-}
-
-/**
- * Pathway Card Component
- */
-function PathwayCard({
-  title,
-  description,
-  to,
+function SignArrow({
+  direction,
+  label,
+  href,
   external,
-  icon,
-  secondaryLink,
+  color = "white",
+  animated = false,
 }: {
-  title: string;
-  description: string;
-  to: string;
-  external: boolean;
-  icon: React.ReactNode;
-  secondaryLink?: { label: string; getUrl: () => string };
+  direction: "left" | "right";
+  label: string;
+  href: string;
+  external?: boolean;
+  color?: "gold" | "blue" | "green" | "white" | "purple";
+  animated?: boolean;
 }) {
-  const cardClasses =
-    'card hover:shadow-md hover:border-primary-200 transition-all duration-200 cursor-pointer group';
+  // Inline style colors for signs (hex values)
+  const signColors = {
+    gold: { from: "#d97706", to: "#f59e0b" },
+    blue: { from: "#2563eb", to: "#3b82f6" },
+    green: { from: "#16a34a", to: "#22c55e" },
+    white: { from: "#475569", to: "#64748b" },
+    purple: { from: "#9333ea", to: "#a855f7" },
+  };
 
-  const cardHeader = (
-    <div className="flex items-start space-x-4">
-      <div className="p-3 bg-primary-50 text-primary-600 rounded-xl flex-shrink-0">
-        {icon}
-      </div>
-      <div className="flex-1 min-w-0">
-        <h2 className="text-xl font-semibold text-gray-900 mb-1 flex items-center">
-          {title}
-          {external && (
-            <svg
-              className="w-4 h-4 ml-2 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-              />
-            </svg>
-          )}
-        </h2>
-        <p className="text-gray-600 text-sm">{description}</p>
+  const arrowHexColors = {
+    gold: "#d97706",
+    blue: "#2563eb",
+    green: "#16a34a",
+    white: "#475569",
+    purple: "#9333ea",
+  };
+
+  const glowColors = {
+    gold: "rgba(251, 191, 36, 1)",
+    blue: "rgba(96, 165, 250, 1)",
+    green: "rgba(34, 197, 94, 1)",
+    white: "rgba(148, 163, 184, 1)",
+    purple: "rgba(168, 85, 247, 1)",
+  };
+
+  const arrow = (
+    <div
+      className={`
+        relative flex items-center cursor-pointer transition-all duration-300 hover:scale-105 group
+        ${direction === "left" ? "flex-row" : "flex-row-reverse"}
+      `}
+    >
+      {/* Animated border flare */}
+      {animated && (
+        <>
+          {/* Outer glow pulse */}
+          <div
+            className="absolute -inset-2 rounded-xl opacity-60"
+            style={{
+              marginLeft: direction === "right" ? "16px" : "0",
+              marginRight: direction === "left" ? "16px" : "0",
+              background: `conic-gradient(from var(--angle, 0deg), transparent 30%, ${glowColors[color]} 50%, transparent 70%)`,
+              animation: "borderSpin 2s linear infinite",
+              filter: "blur(8px)",
+            }}
+          />
+          {/* Sharp spinning border */}
+          <div
+            className="absolute -inset-[3px] rounded-lg"
+            style={{
+              marginLeft: direction === "right" ? "17px" : "0",
+              marginRight: direction === "left" ? "17px" : "0",
+              padding: "3px",
+              background: `conic-gradient(from var(--angle, 0deg), transparent 20%, ${signColors[color].from} 35%, ${glowColors[color]} 50%, ${signColors[color].to} 65%, transparent 80%)`,
+              animation: "borderSpin 2s linear infinite",
+            }}
+          >
+            <div
+              className="w-full h-full rounded-md"
+              style={{
+                background: `linear-gradient(to right, ${signColors[color].from}, ${signColors[color].to})`,
+              }}
+            />
+          </div>
+        </>
+      )}
+
+      {/* Arrow Point */}
+      <div
+        className={`
+          w-0 h-0 transition-colors relative z-10
+          ${direction === "left"
+            ? "border-r-[20px] border-y-[22px] border-y-transparent"
+            : "border-l-[20px] border-y-[22px] border-y-transparent"
+          }
+        `}
+        style={{
+          [direction === "left" ? "borderRightColor" : "borderLeftColor"]: arrowHexColors[color],
+          filter: animated ? `drop-shadow(0 0 8px ${glowColors[color]})` : undefined,
+        }}
+      />
+      {/* Sign Body */}
+      <div
+        className={`
+          px-6 py-3 relative z-10
+          font-bold text-white text-lg tracking-wide uppercase
+          shadow-lg
+          transition-all duration-300
+          ${direction === "left" ? "rounded-r-md" : "rounded-l-md"}
+        `}
+        style={{
+          background: `linear-gradient(to right, ${signColors[color].from}, ${signColors[color].to})`,
+          boxShadow: animated ? `0 0 20px ${glowColors[color]}, 0 0 40px ${glowColors[color].replace('0.8', '0.3').replace('0.6', '0.2')}` : undefined,
+        }}
+      >
+        {label}
       </div>
     </div>
   );
 
-  // Card with secondary link - use div wrapper with separate links
-  if (secondaryLink) {
-    return (
-      <div className={cardClasses.replace('cursor-pointer', '')}>
-        <a href={to} className="block hover:opacity-80 transition-opacity">
-          {cardHeader}
-        </a>
-        <div className="mt-4 pt-3 border-t border-gray-100 flex items-center gap-4">
-          <a
-            href={to}
-            className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center"
-          >
-            SpectaQL Docs
-            <svg
-              className="w-3.5 h-3.5 ml-1"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </a>
-          <a
-            href={secondaryLink.getUrl()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-primary-600 hover:text-primary-700 font-medium flex items-center"
-          >
-            {secondaryLink.label}
-            <svg
-              className="w-3.5 h-3.5 ml-1"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-              />
-            </svg>
-          </a>
-        </div>
-      </div>
-    );
-  }
-
-  // External link
   if (external) {
     return (
-      <a
-        href={to}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={cardClasses}
-      >
-        {cardHeader}
+      <a href={href} target="_blank" rel="noopener noreferrer">
+        {arrow}
       </a>
     );
   }
 
-  // Internal React Router link
+  return <Link to={href}>{arrow}</Link>;
+}
+
+export function LandingPage() {
   return (
-    <Link to={to} className={cardClasses}>
-      {cardHeader}
-    </Link>
+    <div className="min-h-screen flex flex-col overflow-hidden relative">
+      {/* Tailwind safelist - hidden element to prevent class purging */}
+      <div className="hidden from-purple-600 to-purple-500 from-purple-500 to-purple-400 text-purple-600 group-hover:text-purple-500 from-neon-green-600 to-neon-green-500 from-neon-green-500 to-neon-green-400 text-neon-green-600 group-hover:text-neon-green-500" />
+
+      {/* Main Content */}
+      <div className="relative flex flex-col min-h-screen">
+        {/* Hero Section */}
+        <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-6 text-center">
+          {/* Demo Badge */}
+          <div className="mb-6 animate-fade-in-up">
+            <span className="inline-block px-4 py-1.5 bg-cyber-gold-500/20 border border-cyber-gold-500/40 rounded-full text-cyber-gold-400 text-sm font-medium uppercase tracking-wider">
+              Technical Demo
+            </span>
+          </div>
+
+          {/* Main Headline - NCF Grant Management */}
+          <h1
+            className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold tracking-tight mb-4 leading-tight text-white animate-fade-in-up"
+            style={{ animationDelay: "0.1s" }}
+          >
+            <span className="text-cyber-gold-400">NCF</span> Grant Management
+          </h1>
+
+          <p
+            className="text-xl md:text-2xl text-slate-300 font-light mb-8 animate-fade-in-up"
+            style={{ animationDelay: "0.15s" }}
+          >
+            A full-stack application demo for{" "}
+            <span className="text-white font-medium">National Christian Foundation</span>
+          </p>
+
+          {/* Tech Stack Pills */}
+          <div
+            className="flex flex-wrap justify-center gap-3 mb-12 animate-fade-in-up"
+            style={{ animationDelay: "0.2s" }}
+          >
+            {["GraphQL", "React", "TypeScript", "Node.js", "Tailwind CSS", "PostgreSQL"].map((tech) => (
+              <span
+                key={tech}
+                className="px-3 py-1.5 bg-slate-800/60 border border-slate-700 rounded-lg text-slate-300 text-sm font-mono"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+
+          {/* AI Orchestration Subheading */}
+          <div
+            className="mb-12 animate-fade-in-up"
+            style={{ animationDelay: "0.25s" }}
+          >
+            <p className="text-slate-500 text-sm uppercase tracking-widest mb-2">Built with</p>
+            <p className="text-2xl md:text-3xl font-serif text-white">
+              AI <span className="text-cyber-gold-400">Orchestration</span>
+            </p>
+            <p className="max-w-xl mx-auto text-slate-400 text-sm mt-3">
+              As an AI orchestrator, I don't need to know GraphQL to build with it.
+              <br />
+              <span className="text-slate-300">Here's a working demo and source code to illustrate the point.</span>
+            </p>
+          </div>
+
+          {/* Street Sign Post */}
+          <div
+            className="relative flex flex-col items-center animate-fade-in-up"
+            style={{ animationDelay: "0.3s" }}
+          >
+            {/* The Post */}
+            <div className="absolute top-0 bottom-0 w-4 bg-gradient-to-b from-slate-600 to-slate-700 rounded-full shadow-xl z-0" />
+
+            {/* Signs Container */}
+            <div className="relative z-10 flex flex-col gap-4 py-8">
+              {/* Left-pointing signs */}
+              <div className="flex justify-end pr-2">
+                <SignArrow
+                  direction="left"
+                  label="The Story"
+                  href="/story"
+                  color="gold"
+                />
+              </div>
+
+              <div className="flex justify-end pr-2">
+                <SignArrow
+                  direction="left"
+                  label="SpectaQL"
+                  href="/docs/api/index.html"
+                  external
+                  color="purple"
+                />
+              </div>
+
+              {/* Right-pointing signs */}
+              <div className="flex justify-start pl-2">
+                <SignArrow
+                  direction="right"
+                  label="Live Demo"
+                  href="/demo"
+                  color="blue"
+                  animated
+                />
+              </div>
+
+              <div className="flex justify-start pl-2">
+                <SignArrow
+                  direction="right"
+                  label="Sandbox"
+                  href={getApolloSandboxUrl()}
+                  external
+                  color="green"
+                />
+              </div>
+
+              <div className="flex justify-end pr-2">
+                <SignArrow
+                  direction="left"
+                  label="GitHub"
+                  href="https://github.com/tomhundley/ncf-grant-demo"
+                  external
+                  color="white"
+                />
+              </div>
+            </div>
+
+            {/* Post Base */}
+            <div className="w-20 h-4 bg-gradient-to-b from-slate-700 to-slate-800 rounded-full shadow-lg mt-4" />
+          </div>
+
+        </main>
+      </div>
+
+      <MobileNav />
+    </div>
   );
 }

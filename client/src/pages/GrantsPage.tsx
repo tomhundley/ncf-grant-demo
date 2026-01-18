@@ -1,275 +1,364 @@
 /**
  * =============================================================================
- * Grants Page
+ * Grants Page (Premium Edition)
  * =============================================================================
  *
- * Page for viewing and managing grant requests.
- * Demonstrates the full grant workflow:
- *   1. Create grant request (PENDING)
- *   2. Approve or Reject (APPROVED/REJECTED)
- *   3. Fund the grant (FUNDED) - deducts from giving fund balance
- *
- * @see https://www.apollographql.com/docs/react/data/mutations/
+ * Grant management interface allowing filtering and processing of grants.
+ * Features a mobile-optimized card view and desktop table view.
  */
 
-import { useState } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
-import { LIST_GRANTS, GET_DASHBOARD_STATS } from '../graphql/queries';
-import {
-  CREATE_GRANT_REQUEST,
-  APPROVE_GRANT,
-  REJECT_GRANT,
-  FUND_GRANT,
-} from '../graphql/mutations';
-import { LoadingSpinner } from '../components/LoadingSpinner';
-import { ErrorMessage } from '../components/ErrorMessage';
-import { GrantStatusBadge } from '../components/GrantStatusBadge';
-import { GrantRequestForm } from '../components/GrantRequestForm';
-
-type Grant = {
-  id: number;
-  amount: string;
-  status: 'PENDING' | 'APPROVED' | 'FUNDED' | 'REJECTED';
-  purpose: string;
-  notes: string | null;
-  requestedAt: string;
-  ministry: { id: number; name: string; category: string };
-  givingFund: {
-    id: number;
-    name: string;
-    donor: { id: number; firstName: string; lastName: string };
-  };
-};
+import { useState } from "react";
+import { useQuery, useMutation } from "@apollo/client";
+import { APPROVE_GRANT, REJECT_GRANT, CREATE_GRANT_REQUEST } from "../graphql/mutations";
+import { LIST_GRANTS, GET_DASHBOARD_STATS } from "../graphql/queries";
+import { GrantStatusBadge } from "../components/GrantStatusBadge";
+import { LoadingSpinner } from "../components/LoadingSpinner";
+import { ErrorMessage } from "../components/ErrorMessage";
+import { GrantRequestForm } from "../components/GrantRequestForm";
 
 /**
- * Status filter options
+ * Format currency helper
  */
-const STATUS_OPTIONS = [
-  { value: '', label: 'All Statuses' },
-  { value: 'PENDING', label: 'Pending' },
-  { value: 'APPROVED', label: 'Approved' },
-  { value: 'FUNDED', label: 'Funded' },
-  { value: 'REJECTED', label: 'Rejected' },
-];
+function formatCurrency(value: string | number): string {
+  const num = typeof value === "string" ? parseFloat(value) : value;
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(num);
+}
 
 /**
  * Grants Page Component
  */
 export function GrantsPage() {
-  // Filter state
-  const [statusFilter, setStatusFilter] = useState('');
-  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("ALL");
+  const [isCreating, setIsCreating] = useState(false);
 
-  // Fetch grants
+  // Data fetching
   const { data, loading, error } = useQuery(LIST_GRANTS, {
-    variables: statusFilter ? { status: statusFilter } : {},
+    variables: { status: statusFilter === "ALL" ? undefined : statusFilter },
   });
 
+  // Mutation for processing grants
   // Mutations
-  const [createGrant, { loading: creating }] = useMutation(CREATE_GRANT_REQUEST, {
-    refetchQueries: [{ query: LIST_GRANTS }, { query: GET_DASHBOARD_STATS }],
-    onCompleted: () => setIsFormOpen(false),
+  const [approveGrant] = useMutation(APPROVE_GRANT, {
+    refetchQueries: [
+      {
+        query: LIST_GRANTS,
+        variables: {
+          status: statusFilter === "ALL" ? undefined : statusFilter,
+        },
+      },
+      { query: GET_DASHBOARD_STATS },
+    ],
   });
 
-  const [approveGrant, { loading: approving }] = useMutation(APPROVE_GRANT, {
-    refetchQueries: [{ query: LIST_GRANTS }, { query: GET_DASHBOARD_STATS }],
+  const [rejectGrant] = useMutation(REJECT_GRANT, {
+    refetchQueries: [
+      {
+        query: LIST_GRANTS,
+        variables: {
+          status: statusFilter === "ALL" ? undefined : statusFilter,
+        },
+      },
+      { query: GET_DASHBOARD_STATS },
+    ],
   });
 
-  const [rejectGrant, { loading: rejecting }] = useMutation(REJECT_GRANT, {
-    refetchQueries: [{ query: LIST_GRANTS }, { query: GET_DASHBOARD_STATS }],
+  const [createGrantRequest, { loading: createLoading }] = useMutation(CREATE_GRANT_REQUEST, {
+    refetchQueries: [
+      {
+        query: LIST_GRANTS,
+        variables: {
+          status: statusFilter === "ALL" ? undefined : statusFilter,
+        },
+      },
+      { query: GET_DASHBOARD_STATS },
+    ],
   });
 
-  const [fundGrant, { loading: funding }] = useMutation(FUND_GRANT, {
-    refetchQueries: [{ query: LIST_GRANTS }, { query: GET_DASHBOARD_STATS }],
-  });
-
-  // Handle grant actions
-  const handleApprove = async (id: number) => {
-    if (confirm('Approve this grant request?')) {
-      await approveGrant({ variables: { id } });
-    }
-  };
-
-  const handleReject = async (id: number) => {
-    const reason = prompt('Enter rejection reason (optional):');
-    await rejectGrant({ variables: { id, reason } });
-  };
-
-  const handleFund = async (id: number) => {
-    if (confirm('Fund this grant? This will deduct the amount from the giving fund.')) {
-      try {
-        await fundGrant({ variables: { id } });
-      } catch (err) {
-        alert(err instanceof Error ? err.message : 'Failed to fund grant');
-      }
-    }
-  };
-
-  // Handle form submission
-  const handleSubmit = async (formData: {
+  const handleCreateGrant = async (data: {
     ministryId: number;
     givingFundId: number;
     amount: string;
     purpose: string;
   }) => {
-    await createGrant({
-      variables: {
-        input: {
-          ...formData,
-          amount: formData.amount,
+    try {
+      await createGrantRequest({
+        variables: {
+          input: {
+            ministryId: data.ministryId,
+            givingFundId: data.givingFundId,
+            amount: data.amount,
+            purpose: data.purpose,
+          },
         },
-      },
-    });
+      });
+      setIsCreating(false);
+    } catch (e) {
+      console.error("Error creating grant request:", e);
+    }
   };
 
-  // Format currency
-  const formatCurrency = (value: string) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-    }).format(parseFloat(value));
+  const handleProcess = async (id: number, approved: boolean) => {
+    try {
+      if (approved) {
+        await approveGrant({ variables: { id } });
+      } else {
+        await rejectGrant({
+          variables: { id, reason: "Rejected via Grant Dashboard" },
+        });
+      }
+    } catch (e) {
+      console.error("Error processing grant:", e);
+    }
   };
 
-  // Format date
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    });
-  };
+  const grants = data?.grants || [];
 
-  const grants: Grant[] = data?.grants || [];
-  const isProcessing = approving || rejecting || funding;
+  if (loading)
+    return (
+      <div className="h-64 flex items-center justify-center">
+        <LoadingSpinner />
+      </div>
+    );
+  if (error)
+    return (
+      <ErrorMessage message="Error loading grants" details={error.message} />
+    );
 
   return (
-    <div className="space-y-6">
-      {/* Page Header */}
-      <div className="flex justify-between items-center">
+    <div className="space-y-6 animate-fade-in-up">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Grants</h1>
-          <p className="mt-1 text-sm text-gray-500">
-            Manage grant requests and funding
+          <h1 className="text-3xl font-serif font-bold text-white mb-1">
+            Grant Requests
+          </h1>
+          <p className="text-slate-400 text-sm">
+            Manage and process funding allocations.
           </p>
         </div>
-        <button
-          onClick={() => setIsFormOpen(true)}
-          className="btn-primary"
-        >
-          <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-          New Grant Request
-        </button>
-      </div>
 
-      {/* Status Filter */}
-      <div className="card">
-        <div className="flex items-center space-x-4">
-          <label className="text-sm font-medium text-gray-700">Filter by status:</label>
+        <div className="flex flex-wrap items-center gap-3">
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="input w-auto"
+            className="input-premium bg-midnight-800 border-white/10 text-slate-200 py-2 pl-3 pr-8 rounded-lg focus:ring-electric-blue-500"
           >
-            {STATUS_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
+            <option value="ALL">All Statuses</option>
+            <option value="PENDING">Pending</option>
+            <option value="APPROVED">Approved</option>
+            <option value="REJECTED">Rejected</option>
           </select>
+
+          <button
+            onClick={() => setIsCreating(true)}
+            className="btn-primary py-2 px-4 shadow-lg shadow-electric-blue-600/20"
+          >
+            <span className="mr-2 text-lg leading-none">+</span>
+            New Request
+          </button>
         </div>
       </div>
 
-      {/* Grants List */}
-      {loading ? (
-        <div className="flex justify-center py-12">
-          <LoadingSpinner />
-        </div>
-      ) : error ? (
-        <ErrorMessage message="Failed to load grants" details={error.message} />
-      ) : grants.length === 0 ? (
-        <div className="card text-center py-12">
-          <p className="text-gray-500">No grants found</p>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {grants.map((grant) => (
-            <div key={grant.id} className="card">
-              <div className="flex justify-between items-start">
-                {/* Grant Info */}
-                <div className="flex-1">
-                  <div className="flex items-center space-x-3 mb-2">
-                    <h3 className="text-lg font-semibold text-gray-900">
-                      {grant.ministry.name}
-                    </h3>
-                    <GrantStatusBadge status={grant.status} />
-                  </div>
-                  <p className="text-sm text-gray-500 mb-3">{grant.purpose}</p>
-                  <div className="flex items-center space-x-6 text-sm text-gray-500">
-                    <span>
-                      <strong className="text-gray-900">
-                        {formatCurrency(grant.amount)}
-                      </strong>
-                    </span>
-                    <span>
-                      From: {grant.givingFund.name} ({grant.givingFund.donor.firstName}{' '}
-                      {grant.givingFund.donor.lastName})
-                    </span>
-                    <span>Requested: {formatDate(grant.requestedAt)}</span>
-                  </div>
-                  {grant.notes && (
-                    <p className="mt-2 text-sm text-gray-500 italic">
-                      Note: {grant.notes}
-                    </p>
-                  )}
-                </div>
-
-                {/* Actions */}
-                <div className="flex items-center space-x-2 ml-4">
-                  {grant.status === 'PENDING' && (
-                    <>
-                      <button
-                        onClick={() => handleApprove(grant.id)}
-                        disabled={isProcessing}
-                        className="btn-success text-sm px-3 py-1"
-                      >
-                        Approve
-                      </button>
-                      <button
-                        onClick={() => handleReject(grant.id)}
-                        disabled={isProcessing}
-                        className="btn-danger text-sm px-3 py-1"
-                      >
-                        Reject
-                      </button>
-                    </>
-                  )}
-                  {grant.status === 'APPROVED' && (
-                    <button
-                      onClick={() => handleFund(grant.id)}
-                      disabled={isProcessing}
-                      className="btn-primary text-sm px-3 py-1"
-                    >
-                      Fund Grant
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Grant Request Form Modal */}
-      {isFormOpen && (
+      {isCreating && (
         <GrantRequestForm
-          onSubmit={handleSubmit}
-          onCancel={() => setIsFormOpen(false)}
-          loading={creating}
+          onSubmit={handleCreateGrant}
+          onCancel={() => setIsCreating(false)}
+          loading={createLoading}
         />
       )}
+
+      {/* Mobile Card View (Visible on small screens) */}
+      <div className="md:hidden space-y-4">
+        {grants.map((grant: any) => (
+          <div
+            key={grant.id}
+            className="glass-panel p-5 relative overflow-hidden group"
+          >
+            {/* Status Indicator Strip */}
+            <div
+              className={`absolute top-0 left-0 bottom-0 w-1 ${
+                grant.status === "APPROVED"
+                  ? "bg-neon-green-500"
+                  : grant.status === "REJECTED"
+                    ? "bg-red-500"
+                    : "bg-cyber-gold-500"
+              }`}
+            ></div>
+
+            <div className="pl-3">
+              <div className="flex justify-between items-start mb-2">
+                <span className="font-bold text-white text-lg">
+                  {grant.ministry.name}
+                </span>
+                <GrantStatusBadge status={grant.status} />
+              </div>
+
+              <div className="text-2xl font-serif font-bold text-electric-blue-400 mb-2">
+                {formatCurrency(grant.amount)}
+              </div>
+
+              <div className="text-sm text-slate-400 mb-4">
+                <span className="block text-xs uppercase tracking-wider text-slate-500 mb-1">
+                  Purpose
+                </span>
+                {grant.purpose}
+              </div>
+
+              <div className="flex items-center text-xs text-slate-500 mb-4 border-t border-white/5 pt-3">
+                <span className="uppercase tracking-wider mr-2">From:</span>
+                <span className="text-slate-300 font-medium">
+                  {grant.givingFund.name}
+                </span>
+              </div>
+
+              {grant.status === "PENDING" && (
+                <div className="grid grid-cols-2 gap-3 mt-4">
+                  <button
+                    onClick={() => handleProcess(grant.id, true)}
+                    className="flex items-center justify-center py-3 bg-neon-green-600/20 text-neon-green-400 border border-neon-green-600/50 rounded-lg hover:bg-neon-green-600 hover:text-white transition-all active:scale-95"
+                  >
+                    <svg
+                      className="w-5 h-5 mr-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    Approve
+                  </button>
+                  <button
+                    onClick={() => handleProcess(grant.id, false)}
+                    className="flex items-center justify-center py-3 bg-red-600/20 text-red-400 border border-red-600/50 rounded-lg hover:bg-red-600 hover:text-white transition-all active:scale-95"
+                  >
+                    <svg
+                      className="w-5 h-5 mr-1"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                    Reject
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop Table View (Hidden on mobile) */}
+      <div className="hidden md:block glass-panel overflow-hidden">
+        <table className="min-w-full divide-y divide-white/10">
+          <thead className="bg-midnight-900/50">
+            <tr>
+              <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                Ministry
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                Amount
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                Purpose
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">
+                Status
+              </th>
+              <th className="px-6 py-4 text-right text-xs font-medium text-slate-400 uppercase tracking-wider">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-white/10">
+            {grants.map((grant: any) => (
+              <tr key={grant.id} className="hover:bg-white/5 transition-colors">
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="font-medium text-white">
+                    {grant.ministry.name}
+                  </div>
+                  <div className="text-xs text-slate-500 mt-1">
+                    Fund: {grant.givingFund.name}
+                  </div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-lg font-serif text-electric-blue-400 font-bold">
+                  {formatCurrency(grant.amount)}
+                </td>
+                <td className="px-6 py-4 text-sm text-slate-300 max-w-sm truncate">
+                  {grant.purpose}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <GrantStatusBadge status={grant.status} />
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-right">
+                  {grant.status === "PENDING" && (
+                    <div className="flex justify-end space-x-2">
+                      <button
+                        onClick={() => handleProcess(grant.id, true)}
+                        className="p-2 text-neon-green-400 hover:text-white hover:bg-neon-green-600 rounded-full transition-colors"
+                        title="Approve"
+                      >
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </button>
+                      <button
+                        onClick={() => handleProcess(grant.id, false)}
+                        className="p-2 text-red-400 hover:text-white hover:bg-red-600 rounded-full transition-colors"
+                        title="Reject"
+                      >
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {grants.length === 0 && (
+          <div className="text-center py-12 text-slate-500">
+            No grants found matching criteria.
+          </div>
+        )}
+      </div>
     </div>
   );
 }

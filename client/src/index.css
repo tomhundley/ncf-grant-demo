@@ -1,90 +1,94 @@
-/**
- * =============================================================================
- * Global Styles
- * =============================================================================
- *
- * Tailwind CSS imports and custom global styles.
- * Minimal custom CSS - prefer Tailwind utility classes.
- */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Fira+Code:wght@400;500&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Custom base styles */
 @layer base {
   body {
-    @apply bg-gray-50 text-gray-900 antialiased;
+    @apply bg-midnight-950 text-slate-200 antialiased font-sans overflow-x-hidden;
   }
 
-  h1 {
-    @apply text-3xl font-bold tracking-tight;
-  }
-
-  h2 {
-    @apply text-2xl font-semibold tracking-tight;
-  }
-
-  h3 {
-    @apply text-xl font-semibold;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif text-white tracking-tight;
   }
 }
 
-/* Custom component classes */
+/* Animated border spin for Live Demo sign */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes borderSpin {
+  from {
+    --angle: 0deg;
+  }
+  to {
+    --angle: 360deg;
+  }
+}
+
 @layer components {
-  /* Card component */
-  .card {
-    @apply bg-white rounded-lg shadow-sm border border-gray-200 p-6;
+  /* Premium Glassmorphism Panel */
+  .glass-panel {
+    @apply bg-midnight-900/40 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl transition-all duration-300;
   }
 
-  /* Button variants */
-  .btn {
-    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  .glass-panel-hover {
+    @apply hover:bg-midnight-800/60 hover:border-electric-blue-500/30 hover:shadow-glow-blue hover:-translate-y-1;
   }
 
+  /* Primary Action Button - Glowing */
   .btn-primary {
-    @apply btn bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500;
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-xl bg-electric-blue-600 text-white font-bold tracking-wide shadow-lg shadow-electric-blue-600/25 transition-all duration-300 hover:bg-electric-blue-500 hover:shadow-glow-blue hover:-translate-y-0.5 focus:ring-4 focus:ring-electric-blue-600/20 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
-  .btn-secondary {
-    @apply btn bg-gray-100 text-gray-700 hover:bg-gray-200 focus:ring-gray-500;
+  /* Secondary/Outline Button */
+  .btn-outline {
+    @apply inline-flex items-center justify-center px-6 py-3 rounded-xl border border-white/20 text-slate-300 font-medium bg-transparent transition-all duration-300 hover:border-white/40 hover:text-white hover:bg-white/5 hover:-translate-y-0.5 focus:ring-4 focus:ring-white/10;
   }
 
-  .btn-success {
-    @apply btn bg-green-600 text-white hover:bg-green-700 focus:ring-green-500;
-  }
-
-  .btn-danger {
-    @apply btn bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
-  }
-
-  /* Form inputs */
-  .input {
-    @apply block w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:ring-opacity-20 transition-colors;
-  }
-
-  .label {
-    @apply block text-sm font-medium text-gray-700 mb-1;
-  }
-
-  /* Status badges */
+  /* Status Badges */
   .badge {
-    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm backdrop-blur-md;
   }
 
   .badge-pending {
-    @apply badge bg-yellow-100 text-yellow-800;
+    @apply badge bg-yellow-500/10 text-yellow-400 border border-yellow-500/20;
   }
 
-  .badge-approved {
-    @apply badge bg-blue-100 text-blue-800;
+  .badge-success {
+    @apply badge bg-neon-green-500/10 text-neon-green-400 border border-neon-green-500/20;
   }
 
-  .badge-funded {
-    @apply badge bg-green-100 text-green-800;
+  .badge-error {
+    @apply badge bg-red-500/10 text-red-400 border border-red-500/20;
   }
 
-  .badge-rejected {
-    @apply badge bg-red-100 text-red-800;
+  /* Input Fields */
+  .input-premium {
+    @apply bg-midnight-950/50 border border-white/10 text-white placeholder-slate-500 rounded-xl focus:border-electric-blue-500 focus:ring-2 focus:ring-electric-blue-500/20 transition-all duration-200;
   }
+}
+
+/* Custom Scrollbar for sleekness */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #020617;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3b82f6;
 }
