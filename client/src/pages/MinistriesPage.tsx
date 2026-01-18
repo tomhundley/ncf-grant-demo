@@ -63,6 +63,7 @@ export function MinistriesPage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingMinistry, setEditingMinistry] = useState<Ministry | null>(null);
   const [isExportOpen, setIsExportOpen] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   // Build filter object for query (uses debounced search term for smooth transitions)
   const filter = {
@@ -125,13 +126,18 @@ export function MinistriesPage() {
   };
 
   // Handle load more
-  const handleLoadMore = () => {
-    if (data?.ministries?.pageInfo?.hasNextPage) {
-      fetchMore({
-        variables: {
-          after: data.ministries.pageInfo.endCursor,
-        },
-      });
+  const handleLoadMore = async () => {
+    if (data?.ministries?.pageInfo?.hasNextPage && !loadingMore) {
+      setLoadingMore(true);
+      try {
+        await fetchMore({
+          variables: {
+            after: data.ministries.pageInfo.endCursor,
+          },
+        });
+      } finally {
+        setLoadingMore(false);
+      }
     }
   };
 
@@ -201,12 +207,25 @@ export function MinistriesPage() {
               placeholder="Search ministries..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="input-premium w-full pl-10"
+              className="input-premium w-full pl-10 pr-10"
             />
+            {/* Loading indicator while debouncing */}
             {searchTerm && debouncedSearchTerm !== searchTerm && (
               <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                 <div className="w-4 h-4 border-2 border-electric-blue-500 border-t-transparent rounded-full animate-spin"></div>
               </div>
+            )}
+            {/* Clear button */}
+            {searchTerm && debouncedSearchTerm === searchTerm && (
+              <button
+                type="button"
+                onClick={() => setSearchTerm("")}
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
             )}
           </div>
 
@@ -444,9 +463,22 @@ export function MinistriesPage() {
             <div className="flex justify-center pt-4">
               <button
                 onClick={handleLoadMore}
-                className="btn-outline"
+                disabled={loadingMore}
+                className="btn-outline flex items-center gap-2 min-w-[200px] justify-center"
               >
-                Load More Ministries
+                {loadingMore ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-electric-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                    Loading...
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    Load More Ministries
+                  </>
+                )}
               </button>
             </div>
           )}
