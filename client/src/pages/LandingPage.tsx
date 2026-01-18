@@ -16,7 +16,7 @@ import { ThemeToggle } from "../components/ThemeToggle";
  */
 const getApolloSandboxUrl = () => {
   const graphqlEndpoint = import.meta.env.PROD
-    ? "https://ncf-demo.thomashundley.com/api/graphql"
+    ? "https://ncf-grant-demo.elegantsoftwaresolutions.com/api/graphql"
     : "http://localhost:5051";
   return `https://studio.apollographql.com/sandbox/explorer?endpoint=${encodeURIComponent(graphqlEndpoint)}`;
 };
