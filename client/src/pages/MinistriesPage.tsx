@@ -7,7 +7,7 @@
  * Refactored for the new premium dark aesthetic.
  */
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import { LIST_MINISTRIES, GET_DASHBOARD_STATS } from "../graphql/queries";
 import {
@@ -20,20 +20,8 @@ import { ErrorMessage } from "../components/ErrorMessage";
 import { MinistryForm } from "../components/MinistryForm";
 import { CategoryBadge } from "../components/CategoryBadge";
 import { ViewToggle } from "../components/ViewToggle";
-
-/**
- * Ministry category options
- */
-const CATEGORIES = [
-  { value: "", label: "All Categories" },
-  { value: "CHURCH", label: "Church" },
-  { value: "MISSIONS", label: "Missions" },
-  { value: "EDUCATION", label: "Education" },
-  { value: "HUMANITARIAN", label: "Humanitarian" },
-  { value: "MEDIA", label: "Media" },
-  { value: "YOUTH", label: "Youth" },
-  { value: "OTHER", label: "Other" },
-];
+import { ExportModal } from "../components/ExportModal";
+import { CategorySelect } from "../components/CategorySelect";
 
 type Ministry = {
   id: number;
@@ -60,16 +48,27 @@ export function MinistriesPage() {
   const [categoryFilter, setCategoryFilter] = useState("");
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+
+  // Debounce search term for smooth filtering without flash
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
 
   // Modal state
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingMinistry, setEditingMinistry] = useState<Ministry | null>(null);
+  const [isExportOpen, setIsExportOpen] = useState(false);
 
-  // Build filter object for query
+  // Build filter object for query (uses debounced search term for smooth transitions)
   const filter = {
     ...(categoryFilter && { category: categoryFilter }),
     ...(verifiedOnly && { verified: true }),
-    ...(searchTerm && { search: searchTerm }),
+    ...(debouncedSearchTerm && { search: debouncedSearchTerm }),
   };
 
   // Fetch ministries with pagination
@@ -154,7 +153,7 @@ export function MinistriesPage() {
   return (
     <div className="space-y-6 animate-fade-in-up">
       {/* Page Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-serif font-bold text-slate-900 dark:text-white mb-1">
             Ministries
@@ -163,44 +162,60 @@ export function MinistriesPage() {
             Manage ministry organizations eligible for grants.
           </p>
         </div>
-        <button
-          onClick={() => {
-            setEditingMinistry(null);
-            setIsFormOpen(true);
-          }}
-          className="btn-primary py-2 px-4 shadow-lg shadow-electric-blue-600/20"
-        >
-          <span className="mr-2 text-lg leading-none">+</span>
-          Add Ministry
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setIsExportOpen(true)}
+            disabled={!data?.ministries?.edges?.length}
+            className="btn-outline py-2 px-4 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Export
+          </button>
+          <button
+            onClick={() => {
+              setEditingMinistry(null);
+              setIsFormOpen(true);
+            }}
+            className="btn-primary py-2 px-4 shadow-lg shadow-electric-blue-600/20"
+          >
+            <span className="mr-2 text-lg leading-none">+</span>
+            Add Ministry
+          </button>
+        </div>
       </div>
 
       {/* Filters */}
       <div className="glass-panel p-4">
         <div className="flex flex-wrap gap-4 items-center">
           {/* Search */}
-          <div className="flex-1 min-w-[200px]">
+          <div className="flex-1 min-w-[200px] relative">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
             <input
               type="text"
               placeholder="Search ministries..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="input-premium w-full"
+              className="input-premium w-full pl-10"
             />
+            {searchTerm && debouncedSearchTerm !== searchTerm && (
+              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                <div className="w-4 h-4 border-2 border-electric-blue-500 border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            )}
           </div>
 
           {/* Category Filter */}
-          <select
+          <CategorySelect
             value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-            className="input-premium w-auto"
-          >
-            {CATEGORIES.map((cat) => (
-              <option key={cat.value} value={cat.value}>
-                {cat.label}
-              </option>
-            ))}
-          </select>
+            onChange={setCategoryFilter}
+            className="w-52"
+          />
 
           {/* Verified Filter */}
           <label className="flex items-center space-x-2 cursor-pointer text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors">
@@ -474,6 +489,40 @@ export function MinistriesPage() {
           </div>
         </div>
       )}
+
+      {/* Export Modal */}
+      <ExportModal
+        isOpen={isExportOpen}
+        onClose={() => setIsExportOpen(false)}
+        title="Ministries"
+        data={
+          data?.ministries?.edges?.map(({ node }: { node: Ministry }) => ({
+            name: node.name,
+            ein: node.ein || "",
+            category: node.category,
+            city: node.city || "",
+            state: node.state || "",
+            verified: node.verified ? "Yes" : "No",
+            totalFunded: node.totalFunded,
+            description: node.description || "",
+            mission: node.mission || "",
+            website: node.website || "",
+          })) || []
+        }
+        columns={[
+          { key: "name", label: "Name" },
+          { key: "ein", label: "EIN" },
+          { key: "category", label: "Category" },
+          { key: "city", label: "City" },
+          { key: "state", label: "State" },
+          { key: "verified", label: "Verified" },
+          { key: "totalFunded", label: "Total Funded" },
+          { key: "description", label: "Description" },
+          { key: "mission", label: "Mission" },
+          { key: "website", label: "Website" },
+        ]}
+        defaultFilename="ministries-export"
+      />
     </div>
   );
 }

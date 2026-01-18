@@ -137,6 +137,7 @@ export function MinistryForm({
   const isEditing = !!ministry;
 
   const inputClasses = "w-full px-4 py-2.5 bg-slate-50 dark:bg-midnight-800 border border-black/10 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:border-electric-blue-500 focus:ring-2 focus:ring-electric-blue-500/20 transition-all";
+  const selectClasses = `${inputClasses} appearance-none cursor-pointer pr-10 bg-no-repeat bg-right`;
   const labelClasses = "block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5";
 
   return (
@@ -177,18 +178,25 @@ export function MinistryForm({
         </div>
         <div>
           <label className={labelClasses}>Category</label>
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            className={inputClasses}
-          >
-            {CATEGORIES.map((cat) => (
-              <option key={cat.value} value={cat.value}>
-                {cat.label}
-              </option>
-            ))}
-          </select>
+          <div className="relative">
+            <select
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
+              className={selectClasses}
+            >
+              {CATEGORIES.map((cat) => (
+                <option key={cat.value} value={cat.value}>
+                  {cat.label}
+                </option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+              <svg className="h-5 w-5 text-slate-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -249,19 +257,26 @@ export function MinistryForm({
         </div>
         <div>
           <label className={labelClasses}>State</label>
-          <select
-            name="state"
-            value={formData.state}
-            onChange={handleChange}
-            className={inputClasses}
-          >
-            <option value="">Select State</option>
-            {US_STATES.map((state) => (
-              <option key={state} value={state}>
-                {state}
-              </option>
-            ))}
-          </select>
+          <div className="relative">
+            <select
+              name="state"
+              value={formData.state}
+              onChange={handleChange}
+              className={selectClasses}
+            >
+              <option value="">Select State</option>
+              {US_STATES.map((state) => (
+                <option key={state} value={state}>
+                  {state}
+                </option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+              <svg className="h-5 w-5 text-slate-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
 
