@@ -13,10 +13,6 @@
     {
       "source": "/graphql",
       "destination": "/api/graphql"
-    },
-    {
-      "source": "/((?!api|docs|assets|comic-strip|.*\\..*).*)",
-      "destination": "/index.html"
     }
   ],
   "headers": [
