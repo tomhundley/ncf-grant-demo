@@ -13,10 +13,11 @@ import { NavLink, Outlet, Link } from 'react-router-dom';
  * Navigation items configuration
  */
 const navItems = [
-  { path: '/demo', label: 'Dashboard' },
-  { path: '/ministries', label: 'Ministries' },
-  { path: '/grants', label: 'Grants' },
-  { path: '/donors', label: 'Donors' },
+  { path: '/', label: 'Home', end: true },
+  { path: '/demo', label: 'Dashboard', end: true },
+  { path: '/ministries', label: 'Ministries', end: false },
+  { path: '/grants', label: 'Grants', end: false },
+  { path: '/donors', label: 'Donors', end: false },
 ];
 
 /**
@@ -60,7 +61,7 @@ export function DemoLayout() {
                 <NavLink
                   key={item.path}
                   to={item.path}
-                  end={item.path === '/demo'}
+                  end={item.end}
                   className={({ isActive }) =>
                     `px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                       isActive
