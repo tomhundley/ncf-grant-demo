@@ -9,6 +9,7 @@
 
 import { Link } from "react-router-dom";
 import { MobileNav } from "../components/MobileNav";
+import { ThemeToggle } from "../components/ThemeToggle";
 
 /**
  * Feature Card Component
@@ -75,6 +76,11 @@ function StepItem({
 export function GrantLandingPage() {
   return (
     <div className="min-h-screen flex flex-col overflow-hidden relative">
+      {/* Theme Toggle - Prominent fixed position top right */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle showLabel />
+      </div>
+
       {/* Main Content */}
       <div className="relative flex flex-col min-h-screen">
         {/* Hero Section */}

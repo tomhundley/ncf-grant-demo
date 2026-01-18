@@ -10,6 +10,7 @@
 
 import { Link } from "react-router-dom";
 import { MobileNav } from "../components/MobileNav";
+import { ThemeToggle } from "../components/ThemeToggle";
 import { useEffect } from "react";
 
 /**
@@ -69,12 +70,15 @@ export function StoryPage() {
           <div className="hidden sm:block text-cyber-gold-400 font-serif italic text-lg tracking-wider">
             The Story
           </div>
-          <Link
-            to="/demo"
-            className="text-sm font-bold text-neon-green-400 hover:text-neon-green-300 transition-colors uppercase tracking-wider"
-          >
-            Skip to Demo →
-          </Link>
+          <div className="flex items-center gap-4">
+            <ThemeToggle showLabel />
+            <Link
+              to="/demo"
+              className="hidden sm:block text-sm font-bold text-neon-green-400 hover:text-neon-green-300 transition-colors uppercase tracking-wider"
+            >
+              Skip to Demo →
+            </Link>
+          </div>
         </div>
       </header>
 
