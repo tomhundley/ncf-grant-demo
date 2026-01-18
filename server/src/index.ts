@@ -23,6 +23,9 @@
  * @see https://github.com/tomhundley/ncf-grant-demo
  */
 
+// Load environment variables from .env file (must be first!)
+import 'dotenv/config';
+
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { typeDefs } from './schema/typeDefs.js';
