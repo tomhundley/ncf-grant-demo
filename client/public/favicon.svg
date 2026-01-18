@@ -1,6 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <circle cx="50" cy="50" r="45" fill="#2563eb"/>
-  <path d="M50 25C36.2 25 25 36.2 25 50s11.2 25 25 25 25-11.2 25-25-11.2-25-25-25zm0 45c-11 0-20-9-20-20s9-20 20-20 20 9 20 20-9 20-20 20z" fill="white"/>
-  <path d="M50 35c-8.3 0-15 6.7-15 15s6.7 15 15 15 15-6.7 15-15-6.7-15-15-15zm0 5c5.5 0 10 4.5 10 10s-4.5 10-10 10-10-4.5-10-10 4.5-10 10-10z" fill="white"/>
-  <circle cx="50" cy="50" r="5" fill="white"/>
+  <!-- Background circle with warm, trustworthy color -->
+  <circle cx="50" cy="50" r="48" fill="#3b82f6"/>
+  
+  <!-- Stylized hands forming a heart/giving gesture -->
+  <g fill="#ffffff">
+    <!-- Left hand -->
+    <path d="M30 45 Q25 40 25 35 Q25 28 30 28 Q35 28 35 35 L35 48 Z" opacity="0.95"/>
+    
+    <!-- Right hand -->
+    <path d="M70 45 Q75 40 75 35 Q75 28 70 28 Q65 28 65 35 L65 48 Z" opacity="0.95"/>
+    
+    <!-- Heart/support shape in center -->
+    <path d="M35 48 Q35 60 50 72 Q65 60 65 48 L35 48 Z"/>
+    
+    <!-- Cross symbol (subtle, integrated into design) -->
+    <rect x="48" y="38" width="4" height="16" rx="1"/>
+    <rect x="42" y="44" width="16" height="4" rx="1"/>
+  </g>
+  
+  <!-- Subtle highlight for depth -->
+  <circle cx="50" cy="50" r="48" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.2"/>
 </svg>
