@@ -243,10 +243,19 @@ export function LandingPage() {
               <div className="flex justify-end pr-2">
                 <SignArrow
                   direction="left"
+                  label="Tech Stack"
+                  href="/tech"
+                  color="purple"
+                />
+              </div>
+
+              <div className="flex justify-start pl-2">
+                <SignArrow
+                  direction="right"
                   label="SpectaQL"
                   href="/docs/api/index.html"
                   external
-                  color="purple"
+                  color="white"
                 />
               </div>
 
