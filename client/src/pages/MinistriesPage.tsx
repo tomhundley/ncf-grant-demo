@@ -187,7 +187,7 @@ export function MinistriesPage() {
       </div>
 
       {/* Filters */}
-      <div className="glass-panel p-4">
+      <div className="glass-panel p-4 relative z-20">
         <div className="flex flex-wrap gap-4 items-center">
           {/* Search */}
           <div className="flex-1 min-w-[200px] relative">
