@@ -619,7 +619,6 @@ const resolvers = {
     givingFund: async (parent: { givingFundId: number }) => {
       return prisma.givingFund.findUnique({ where: { id: parent.givingFundId } });
     },
-    requestedAt: (parent: { createdAt: Date }) => parent.createdAt,
   },
 };
 
