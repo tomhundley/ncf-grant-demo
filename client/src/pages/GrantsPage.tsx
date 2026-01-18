@@ -32,7 +32,7 @@ type Grant = {
   status: 'PENDING' | 'APPROVED' | 'FUNDED' | 'REJECTED';
   purpose: string;
   notes: string | null;
-  createdAt: string;
+  requestedAt: string;
   ministry: { id: number; name: string; category: string };
   givingFund: {
     id: number;
@@ -217,7 +217,7 @@ export function GrantsPage() {
                       From: {grant.givingFund.name} ({grant.givingFund.donor.firstName}{' '}
                       {grant.givingFund.donor.lastName})
                     </span>
-                    <span>Requested: {formatDate(grant.createdAt)}</span>
+                    <span>Requested: {formatDate(grant.requestedAt)}</span>
                   </div>
                   {grant.notes && (
                     <p className="mt-2 text-sm text-gray-500 italic">

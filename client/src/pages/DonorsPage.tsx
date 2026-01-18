@@ -33,7 +33,7 @@ type Donor = {
   lastName: string;
   email: string;
   phone: string | null;
-  totalContributions: string;
+  totalBalance: string;
   givingFunds: GivingFund[];
 };
 
@@ -118,7 +118,7 @@ export function DonorsPage() {
                 <div className="text-right">
                   <p className="text-sm text-gray-500">Total Contributions</p>
                   <p className="text-2xl font-bold text-primary-600">
-                    {formatCurrency(donor.totalContributions)}
+                    {formatCurrency(donor.totalBalance)}
                   </p>
                 </div>
               </div>

@@ -79,7 +79,7 @@ export const GRANT_CORE_FIELDS = gql`
     status
     purpose
     notes
-    createdAt
+    requestedAt
     approvedAt
     fundedAt
     rejectedAt
@@ -175,7 +175,7 @@ export const LIST_DONORS = gql`
   query ListDonors {
     donors {
       ...DonorCoreFields
-      totalContributions
+      totalBalance
       givingFunds {
         ...GivingFundCoreFields
       }
@@ -194,7 +194,7 @@ export const GET_DONOR = gql`
   query GetDonor($id: Int!) {
     donor(id: $id) {
       ...DonorCoreFields
-      totalContributions
+      totalBalance
       givingFunds {
         ...GivingFundCoreFields
         grants {
