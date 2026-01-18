@@ -391,7 +391,7 @@ const resolvers = {
       if (status) where.status = status;
       if (ministryId) where.ministryId = ministryId;
       if (givingFundId) where.givingFundId = givingFundId;
-      return prisma.grant.findMany({ where, orderBy: { createdAt: 'desc' } });
+      return prisma.grant.findMany({ where, orderBy: { requestedAt: 'desc' } });
     },
 
     dashboardStats: async () => {
@@ -532,11 +532,6 @@ const resolvers = {
           data: { balance: { decrement: Number(grant.amount) } },
         });
 
-        await tx.ministry.update({
-          where: { id: grant.ministryId },
-          data: { totalFunded: { increment: Number(grant.amount) } },
-        });
-
         return tx.grant.update({
           where: { id },
           data: { status: 'FUNDED', fundedAt: new Date() },
@@ -549,6 +544,13 @@ const resolvers = {
   Ministry: {
     grants: async (parent: { id: number }) => {
       return prisma.grant.findMany({ where: { ministryId: parent.id } });
+    },
+    totalFunded: async (parent: { id: number }) => {
+      const agg = await prisma.grant.aggregate({
+        where: { ministryId: parent.id, status: 'FUNDED' },
+        _sum: { amount: true },
+      });
+      return Number(agg._sum.amount || 0);
     },
     grantCounts: async (parent: { id: number }) => {
       const counts = await prisma.grant.groupBy({
@@ -634,7 +636,8 @@ const server = new ApolloServer({
 // Handle requests manually for Vercel Edge/Serverless
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   // Handle CORS preflight
-  if (req.method === 'OPTIONS') {
+  const method = req.method as string;
+  if (method === 'OPTIONS') {
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
