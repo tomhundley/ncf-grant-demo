@@ -15,6 +15,7 @@ import { GrantStatusBadge } from "../components/GrantStatusBadge";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 import { ErrorMessage } from "../components/ErrorMessage";
 import { GrantRequestForm } from "../components/GrantRequestForm";
+import { ViewToggle } from "../components/ViewToggle";
 
 /**
  * Format currency helper
@@ -33,6 +34,7 @@ function formatCurrency(value: string | number): string {
  * Grants Page Component
  */
 export function GrantsPage() {
+  const [viewMode, setViewMode] = useState<'card' | 'list'>('card');
   const [statusFilter, setStatusFilter] = useState("ALL");
   const [isCreating, setIsCreating] = useState(false);
 
@@ -153,6 +155,8 @@ export function GrantsPage() {
             <option value="REJECTED">Rejected</option>
           </select>
 
+          <ViewToggle viewMode={viewMode} onViewChange={setViewMode} />
+
           <button
             onClick={() => setIsCreating(true)}
             className="btn-primary py-2 px-4 shadow-lg shadow-electric-blue-600/20"
@@ -171,8 +175,8 @@ export function GrantsPage() {
         />
       )}
 
-      {/* Mobile Card View (Visible on small screens) */}
-      <div className="md:hidden space-y-4">
+      {/* Card View - Always visible on mobile, conditional on desktop */}
+      <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ${viewMode === 'list' ? 'md:hidden' : ''}`}>
         {grants.map((grant: any) => (
           <div
             key={grant.id}
@@ -262,7 +266,8 @@ export function GrantsPage() {
         ))}
       </div>
 
-      {/* Desktop Table View (Hidden on mobile) */}
+      {/* List View - Hidden on mobile, visible on desktop when selected */}
+      {viewMode === 'list' && (
       <div className="hidden md:block glass-panel overflow-hidden">
         <table className="min-w-full divide-y divide-white/10">
           <thead className="bg-midnight-900/50">
@@ -359,6 +364,14 @@ export function GrantsPage() {
           </div>
         )}
       </div>
+      )}
+
+      {/* Empty state for card view */}
+      {viewMode === 'card' && grants.length === 0 && (
+        <div className="glass-panel text-center py-12 text-slate-500">
+          No grants found matching criteria.
+        </div>
+      )}
     </div>
   );
 }
