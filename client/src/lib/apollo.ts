@@ -27,12 +27,10 @@ import { relayStylePagination } from '@apollo/client/utilities';
 
 /**
  * GraphQL server endpoint
- * In development, this is proxied by Vite to localhost:4000
+ * In development, this is proxied by Vite to localhost:5051
  * In production, this should be the deployed API URL
  */
-const GRAPHQL_URI = import.meta.env.PROD
-  ? (import.meta.env.VITE_GRAPHQL_URI ?? '/graphql')
-  : 'http://localhost:4000';
+const GRAPHQL_URI = import.meta.env.VITE_GRAPHQL_URI ?? '/graphql';
 
 /**
  * HTTP link for sending GraphQL operations
