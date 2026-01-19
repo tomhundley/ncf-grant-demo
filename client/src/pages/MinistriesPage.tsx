@@ -22,6 +22,7 @@ import { CategoryBadge } from "../components/CategoryBadge";
 import { ViewToggle } from "../components/ViewToggle";
 import { ExportModal } from "../components/ExportModal";
 import { CategorySelect } from "../components/CategorySelect";
+import { ConfirmModal } from "../components/ConfirmModal";
 
 type Ministry = {
   id: number;
@@ -65,6 +66,10 @@ export function MinistriesPage() {
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
 
+  // Delete confirmation state
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const [ministryToDelete, setMinistryToDelete] = useState<Ministry | null>(null);
+
   // Build filter object for query (uses debounced search term for smooth transitions)
   const filter = {
     ...(categoryFilter && { category: categoryFilter }),
@@ -98,11 +103,15 @@ export function MinistriesPage() {
   });
 
   // Delete ministry mutation
-  const [deleteMinistry] = useMutation(DELETE_MINISTRY, {
+  const [deleteMinistry, { loading: deleting }] = useMutation(DELETE_MINISTRY, {
     refetchQueries: [
       { query: LIST_MINISTRIES },
       { query: GET_DASHBOARD_STATS },
     ],
+    onCompleted: () => {
+      setIsDeleteConfirmOpen(false);
+      setMinistryToDelete(null);
+    },
   });
 
   // Handle form submission
@@ -118,10 +127,16 @@ export function MinistriesPage() {
     }
   };
 
-  // Handle delete
-  const handleDelete = async (id: number) => {
-    if (confirm("Are you sure you want to delete this ministry?")) {
-      await deleteMinistry({ variables: { id } });
+  // Handle delete - opens confirmation modal
+  const handleDeleteClick = (ministry: Ministry) => {
+    setMinistryToDelete(ministry);
+    setIsDeleteConfirmOpen(true);
+  };
+
+  // Confirm delete - executes the deletion
+  const handleDeleteConfirm = async () => {
+    if (ministryToDelete) {
+      await deleteMinistry({ variables: { id: ministryToDelete.id } });
     }
   };
 
@@ -343,7 +358,7 @@ export function MinistriesPage() {
                         Edit
                       </button>
                       <button
-                        onClick={() => handleDelete(ministry.id)}
+                        onClick={() => handleDeleteClick(ministry)}
                         className="text-sm text-red-400 hover:text-red-300 font-medium transition-colors"
                       >
                         Delete
@@ -443,7 +458,7 @@ export function MinistriesPage() {
                               Edit
                             </button>
                             <button
-                              onClick={() => handleDelete(ministry.id)}
+                              onClick={() => handleDeleteClick(ministry)}
                               className="text-red-400 hover:text-red-300 font-medium transition-colors"
                             >
                               Delete
@@ -554,6 +569,22 @@ export function MinistriesPage() {
           { key: "website", label: "Website" },
         ]}
         defaultFilename="ministries-export"
+      />
+
+      {/* Delete Confirmation Modal */}
+      <ConfirmModal
+        isOpen={isDeleteConfirmOpen}
+        onClose={() => {
+          setIsDeleteConfirmOpen(false);
+          setMinistryToDelete(null);
+        }}
+        onConfirm={handleDeleteConfirm}
+        title="Delete Ministry"
+        message={`Are you sure you want to delete "${ministryToDelete?.name}"? This action cannot be undone.`}
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        variant="danger"
+        loading={deleting}
       />
     </div>
   );

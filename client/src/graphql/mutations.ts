@@ -202,18 +202,3 @@ export const CREATE_DONOR = gql`
     }
   }
 `;
-
-/**
- * Update donor information
- */
-export const UPDATE_DONOR = gql`
-  mutation UpdateDonor($id: Int!, $input: UpdateDonorInput!) {
-    updateDonor(id: $id, input: $input) {
-      id
-      firstName
-      lastName
-      email
-      phone
-    }
-  }
-`;
